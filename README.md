@@ -1,11 +1,17 @@
 # fake-messages
 
-install dependencies:
+## 快速上手
+
+安装依赖包：
 
     $ yarn
 
-run the app:
+运行开发环境：
 
-    $ DEBUG=fake-messages:* yarn start
+    $ yarn dev
 
-然后访问`http://localhost:3000`.
+运行生产环境：
+
+    $ yarn start
+
+运行之后，访问`http://localhost:3000`.
