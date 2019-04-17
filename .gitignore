@@ -1,6 +1,10 @@
 # 依赖包
 /node_modules
 
+# 数据库
+/db/*
+!/db/.keep
+
 # Vim sessions
 /default.session
 /default.session.lock
