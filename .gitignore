@@ -1,0 +1,6 @@
+# 依赖包
+/node_modules
+
+# Vim sessions
+/default.session
+/default.session.lock
