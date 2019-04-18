@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build:js": "webpack",
+    "watch:js": "webpack -w",
     "start": "node ./bin/www",
     "dev": "cross-env DEBUG=fake-messages:* nodemon node ./bin/www"
   },

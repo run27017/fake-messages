@@ -18,7 +18,13 @@
 
 ### 使用webpack打包客户端js文件
 
+打包：
+
     $ yarn build:js
+
+实时打包：
+
+    $ yarn watch:js
 
 ### 运行服务器
 
