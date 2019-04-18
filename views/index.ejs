@@ -11,6 +11,12 @@
 <body>
   <div id="app">
     <i-table :columns="columns" :data="emails">
+      <template slot-scope="{ row }" slot="from">
+        {{ getContactString(row.fromAddress, row.fromName) }}
+      </template>
+      <template slot-scope="{ row }" slot="to">
+        {{ getContactString(row.toAddress, row.toName) }}
+      </template>
       <template slot-scope="{ row }" slot="createdAt">
         {{ new Date(row.createdAt) }}
       </template>

@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+
+var sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database('db/dev.sqlite3');
+
+db.serialize(function() {
+  db.run(`CREATE TABLE email(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+    fromName VARCHAR(255),
+    fromAddress VARCHAR(255) NOT NULL,
+    toName VARCHAR(255),
+    toAddress VARCHAR(255) NOT NULL,
+    subject TEXT,
+    content TEXT NOT NULL, 
+    createdAt DATETIME DEFAULT (datetime('now','localtime'))
+  )`);
+
+  insertSeeds()
+});
+
+db.close();
+
+function insertSeeds() {
+  var stmt = db.prepare('INSERT INTO email(fromName, fromAddress, toName, toAddress, subject, content) VALUES (?, ?, ?, ?, ?, ?)');
+
+  for (var i = 1; i <= 10; i++) {
+    stmt.run('小明', 'xiaoming@example.com', '小红', 'xiaohong@example.com', 'subject', `content ${i}`);
+  }
+
+  stmt.finalize();
+}
+

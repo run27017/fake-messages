@@ -3,6 +3,18 @@ new Vue({
   data: {
     columns: [
       {
+        title: '发件人',
+        slot: 'from'
+      },
+      {
+        title: '收件人',
+        slot: 'to'
+      },
+      {
+        title: '主题',
+        key: 'subject'
+      },
+      {
         title: '内容',
         key: 'content'
       },
@@ -12,6 +24,15 @@ new Vue({
       }
     ],
     emails: []
+  },
+  methods: {
+    getContactString(address, name) {
+      if (name) {
+        return name + ' <' + address + '>'
+      } else {
+        return address
+      }
+    }
   },
   created: function () {
     var vm = this;

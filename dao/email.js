@@ -1,24 +1,30 @@
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('db/dev.sqlite3');
+var dbWrap = require('./db').wrap
 
 function getAll (callback) {
-  db.all("SELECT * FROM email", function(err, rows) {
-    if (err) {
-      callback && callback(err);
-    } else {
-      callback && callback(null, rows);
-    }
-  });
+  dbWrap(db => {
+    db.all("SELECT * FROM email ORDER BY createdAt DESC", function(err, rows) {
+      if (err) {
+        callback && callback(err);
+      } else {
+        callback && callback(null, rows);
+      }
+    })
+  })
 }
 
 function create (email, callback) {
-  db.run('INSERT INTO email(content, createdAt) VALUES (?, ?)', [email.content, email.createdAt], function (err) {
-    if (err) {
-      callback && callback(err);
-    } else {
-      callback && callback(null);
-    }
-  });
+  dbWrap(db => {
+    db.run('INSERT INTO email(fromName, fromAddress, toName, toAddress, subject, content) VALUES (?, ?, ?, ?, ?, ?)', 
+      [email.fromName, email.fromAddress, email.toName, email.toAddress, email.subject, email.content], 
+      function (err) {
+        if (err) {
+          callback && callback(err);
+        } else {
+          callback && callback(null);
+        }
+      }
+    )
+  })
 }
 
 module.exports = {
