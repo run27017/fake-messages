@@ -1,5 +1,13 @@
+import Vue from 'vue/dist/vue.esm.js'
+import axios from 'axios'
+import 'iview/dist/styles/iview.css'
+import { Table } from 'iview'
+
 new Vue({
   el: '#app',
+  components: {
+    'i-table': Table
+  },
   data: {
     columns: [
       {
@@ -34,11 +42,10 @@ new Vue({
       }
     }
   },
-  created: function () {
-    var vm = this;
+  created () {
     axios.get('/emails')
-      .then(function (response) {
-        vm.emails = response.data;
+      .then(response => {
+        this.emails = response.data;
       })
       .catch(function () {
         console.log('error', arguments);

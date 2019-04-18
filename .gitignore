@@ -5,6 +5,10 @@
 /db/*
 !/db/.keep
 
+# webpack打包的文件
+/public/javascripts/app.js
+/public/assets
+
 # Vim sessions
 /default.session
 /default.session.lock

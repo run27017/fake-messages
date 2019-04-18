@@ -16,6 +16,10 @@
 
     $ rm db/dev.sqlite3
 
+### 使用webpack打包客户端js文件
+
+    $ yarn build:js
+
 ### 运行服务器
 
 运行开发环境：
