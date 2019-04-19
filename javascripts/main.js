@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.esm.js'
+import Vue from 'vue'
 import axios from 'axios'
 import 'iview/dist/styles/iview.css'
 import { Table, Page } from 'iview'
