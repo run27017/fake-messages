@@ -3,9 +3,6 @@
 <head>
   <meta charset="utf-8">
   <title>emails example</title>
-  <!-- <link rel="stylesheet" type="text/css" href="/stylesheets/iview.css"> -->
-  <!-- <script type="text/javascript" src="/javascripts/iview.min.js"></script> -->
-  <!-- <script type="text/javascript" src="/javascripts/axios.min.js"></script> -->
 </head>
 <body>
   <div id="app">
@@ -17,7 +14,7 @@
         {{ getContactString(row.toAddress, row.toName) }}
       </template>
       <template slot-scope="{ row }" slot="createdAt">
-        {{ new Date(row.createdAt) }}
+        {{ row.createdAt | datetime }}
       </template>
     </i-table>
   </div>
