@@ -1,16 +1,30 @@
 const DB = require('./db')
 
 function getListWithTotal (options, callback) {
-  const db = DB.create()
   const { from = 1, size = 10 } = options
-  db.all("SELECT * FROM email ORDER BY createdAt DESC LIMIT ? OFFSET ?", [size, from - 1], function(err, emails) {
-    if (err) {
-      callback && callback(err);
+  const output = {}
+  const db = DB.create()
+  db.serialize(() => {
+    db.all("SELECT * FROM email ORDER BY createdAt DESC LIMIT ? OFFSET ?", [size, from - 1], function(err, emails) {
+      if (err) {
+        output.error = err
+      } else {
+        output.emails = emails
+      }
+    })
+    db.get('SELECT count(*) as count FROM email', function (err, { count }) {
+      if (err) {
+        output.error = err
+      } else {
+        output.total = count
+      }
+    })
+  })
+  db.close(() => {
+    if (output.error) {
+      callback && callback(output.error);
     } else {
-      db.get('SELECT count(*) as count FROM email', function (err, { count }) {
-        callback && callback(null, emails, count)
-        DB.close(db)
-      })
+      callback && callback(null, output.emails, output.total)
     }
   })
 }
