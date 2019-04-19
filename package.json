@@ -6,7 +6,8 @@
     "build:js": "webpack",
     "watch:js": "webpack -w",
     "start": "node ./bin/www",
-    "dev": "cross-env DEBUG=fake-messages:* nodemon node ./bin/www"
+    "server:dev": "cross-env DEBUG=fake-messages:* nodemon node ./bin/www",
+    "dev": "node bin/dev_server"
   },
   "dependencies": {
     "axios": "^0.18.0",

@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+const spawn = require('child_process').spawn
+
+spawn('yarn', ['server:dev'], {
+  stdio: 'inherit'
+})
+
+spawn('yarn', ['watch:js'], {
+  stdio: 'inherit'
+})

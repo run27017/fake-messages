@@ -10,7 +10,7 @@
 
 创建数据库：
 
-    $ bin/create_tables
+    $ bin/create_db
 
 删除数据库：
 
