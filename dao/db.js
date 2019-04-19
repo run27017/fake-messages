@@ -15,6 +15,8 @@ function wrap (run) {
 }
 
 module.exports = {
+  create,
+  close,
   wrap
 }
 

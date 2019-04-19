@@ -1,12 +1,13 @@
 import Vue from 'vue/dist/vue.esm.js'
 import axios from 'axios'
 import 'iview/dist/styles/iview.css'
-import { Table } from 'iview'
+import { Table, Page } from 'iview'
 
 new Vue({
   el: '#app',
   components: {
-    'i-table': Table
+    'i-table': Table,
+    'i-page': Page
   },
   filters: {
     datetime (timestamps) {
@@ -43,24 +44,46 @@ new Vue({
         slot: 'createdAt'
       }
     ],
-    emails: []
+    emails: [],
+    pageInfo: {
+      number: 1,
+      size: 10,
+      total: 0
+    }
+  },
+  computed: {
+    pageParams () {
+      return {
+        from: (this.pageInfo.number - 1) * this.pageInfo.size + 1,
+        size: this.pageInfo.size
+      }
+    }
   },
   methods: {
-    getContactString(address, name) {
+    getContactString (address, name) {
       if (name) {
         return name + ' <' + address + '>'
       } else {
         return address
       }
+    },
+    pageNumberChanged (newPageNumber) {
+      this.pageInfo.number = newPageNumber
+      this.fetchEmails()
+    },
+    fetchEmails () {
+      axios.get('/emails', { params: this.pageParams })
+        .then(response => {
+          const data = response.data
+          this.emails = data.emails
+          this.pageInfo.total = data.total
+        })
+        .catch(function () {
+          console.log('error', arguments);
+        })
     }
   },
   created () {
-    axios.get('/emails')
-      .then(response => {
-        this.emails = response.data;
-      })
-      .catch(function () {
-        console.log('error', arguments);
-      })
+    this.fetchEmails()
   }
 })

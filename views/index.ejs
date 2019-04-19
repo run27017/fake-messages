@@ -17,6 +17,7 @@
         {{ row.createdAt | datetime }}
       </template>
     </i-table>
+    <i-page :total="pageInfo.total" :current="pageInfo.number" @on-change="pageNumberChanged" />
   </div>
   <script type="text/javascript" src="/javascripts/app.js"></script>
 </body>
