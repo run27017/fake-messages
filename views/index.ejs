@@ -5,20 +5,7 @@
   <title>emails example</title>
 </head>
 <body>
-  <div id="app">
-    <i-table :columns="columns" :data="emails">
-      <template slot-scope="{ row }" slot="from">
-        {{ getContactString(row.fromAddress, row.fromName) }}
-      </template>
-      <template slot-scope="{ row }" slot="to">
-        {{ getContactString(row.toAddress, row.toName) }}
-      </template>
-      <template slot-scope="{ row }" slot="createdAt">
-        {{ row.createdAt | datetime }}
-      </template>
-    </i-table>
-    <i-page :total="pageInfo.total" :current="pageInfo.number" @on-change="pageNumberChanged" />
-  </div>
+  <div id="app"></div>
   <script type="text/javascript" src="/javascripts/app.js"></script>
 </body>
 </html>

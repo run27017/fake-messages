@@ -556,6 +556,20 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
+"@vue/component-compiler-utils@^2.5.1":
+  version "2.6.0"
+  resolved "http://registry.npm.taobao.org/@vue/component-compiler-utils/download/@vue/component-compiler-utils-2.6.0.tgz#aa46d2a6f7647440b0b8932434d22f12371e543b"
+  dependencies:
+    consolidate "^0.15.1"
+    hash-sum "^1.0.2"
+    lru-cache "^4.1.2"
+    merge-source-map "^1.1.0"
+    postcss "^7.0.14"
+    postcss-selector-parser "^5.0.0"
+    prettier "1.16.3"
+    source-map "~0.6.1"
+    vue-template-es2015-compiler "^1.9.0"
+
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"
   resolved "http://registry.npm.taobao.org/@webassemblyjs/ast/download/@webassemblyjs/ast-1.8.5.tgz#51b1c5fe6576a34953bf4b253df9f0d490d9e359"
@@ -907,7 +921,7 @@ binary-extensions@^1.0.0:
   version "1.13.1"
   resolved "http://registry.npm.taobao.org/binary-extensions/download/binary-extensions-1.13.1.tgz#598afe54755b2868a5330d2aff9d4ebb53209b65"
 
-bluebird@^3.5.3:
+bluebird@^3.1.1, bluebird@^3.5.3:
   version "3.5.4"
   resolved "http://registry.npm.taobao.org/bluebird/download/bluebird-3.5.4.tgz#d6cc661595de30d5b3af5fcedd3c0b3ef6ec5714"
 
@@ -1247,6 +1261,12 @@ console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   version "1.1.0"
   resolved "http://registry.npm.taobao.org/console-control-strings/download/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
 
+consolidate@^0.15.1:
+  version "0.15.1"
+  resolved "http://registry.npm.taobao.org/consolidate/download/consolidate-0.15.1.tgz#21ab043235c71a07d45d9aad98593b0dba56bab7"
+  dependencies:
+    bluebird "^3.1.1"
+
 constants-browserify@^1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/constants-browserify/download/constants-browserify-1.0.0.tgz#c20b96d8c617748aaf1c16021760cd27fcb8cb75"
@@ -1415,6 +1435,10 @@ css-loader@^2.1.1:
     postcss-value-parser "^3.3.0"
     schema-utils "^1.0.0"
 
+cssesc@^2.0.0:
+  version "2.0.0"
+  resolved "http://registry.npm.taobao.org/cssesc/download/cssesc-2.0.0.tgz#3b13bd1bb1cb36e1bcb5a4dcd27f54c5dcb35703"
+
 cssesc@^3.0.0:
   version "3.0.0"
   resolved "http://registry.npm.taobao.org/cssesc/download/cssesc-3.0.0.tgz#37741919903b868565e1c09ea747445cd18983ee"
@@ -1432,6 +1456,10 @@ dashdash@^1.12.0:
 date-now@^0.1.4:
   version "0.1.4"
   resolved "http://registry.npm.taobao.org/date-now/download/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
+
+de-indent@^1.0.2:
+  version "1.0.2"
+  resolved "http://registry.npm.taobao.org/de-indent/download/de-indent-1.0.2.tgz#b2038e846dc33baa5796128d0804b455b8c1e21d"
 
 debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@~2.6.9:
   version "2.6.9"
@@ -2106,12 +2134,20 @@ hash-base@^3.0.0:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
+hash-sum@^1.0.2:
+  version "1.0.2"
+  resolved "http://registry.npm.taobao.org/hash-sum/download/hash-sum-1.0.2.tgz#33b40777754c6432573c120cc3808bbd10d47f04"
+
 hash.js@^1.0.0, hash.js@^1.0.3:
   version "1.1.7"
   resolved "http://registry.npm.taobao.org/hash.js/download/hash.js-1.1.7.tgz#0babca538e8d4ee4a0f8988d68866537a003cf42"
   dependencies:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
+
+he@^1.1.0:
+  version "1.2.0"
+  resolved "http://registry.npm.taobao.org/he/download/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
 
 hmac-drbg@^1.0.0:
   version "1.0.1"
@@ -2578,7 +2614,7 @@ lowercase-keys@^1.0.0:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/lowercase-keys/download/lowercase-keys-1.0.1.tgz#6f9e30b47084d971a7c820ff15a6c5167b74c26f"
 
-lru-cache@^4.0.1:
+lru-cache@^4.0.1, lru-cache@^4.1.2:
   version "4.1.5"
   resolved "http://registry.npm.taobao.org/lru-cache/download/lru-cache-4.1.5.tgz#8bbe50ea85bed59bc9e33dcab8235ee9bcf443cd"
   dependencies:
@@ -2654,6 +2690,12 @@ memory-fs@^0.4.0, memory-fs@~0.4.1:
 merge-descriptors@1.0.1:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/merge-descriptors/download/merge-descriptors-1.0.1.tgz#b00aaa556dd8b44568150ec9d1b953f3f90cbb61"
+
+merge-source-map@^1.1.0:
+  version "1.1.0"
+  resolved "http://registry.npm.taobao.org/merge-source-map/download/merge-source-map-1.1.0.tgz#2fdde7e6020939f70906a68f2d7ae685e4c8c646"
+  dependencies:
+    source-map "^0.6.1"
 
 methods@~1.1.2:
   version "1.1.2"
@@ -3220,6 +3262,14 @@ postcss-modules-values@^2.0.0:
     icss-replace-symbols "^1.1.0"
     postcss "^7.0.6"
 
+postcss-selector-parser@^5.0.0:
+  version "5.0.0"
+  resolved "http://registry.npm.taobao.org/postcss-selector-parser/download/postcss-selector-parser-5.0.0.tgz#249044356697b33b64f1a8f7c80922dddee7195c"
+  dependencies:
+    cssesc "^2.0.0"
+    indexes-of "^1.0.1"
+    uniq "^1.0.1"
+
 postcss-selector-parser@^6.0.0:
   version "6.0.2"
   resolved "http://registry.npm.taobao.org/postcss-selector-parser/download/postcss-selector-parser-6.0.2.tgz#934cf799d016c83411859e09dcecade01286ec5c"
@@ -3243,6 +3293,10 @@ postcss@^7.0.14, postcss@^7.0.5, postcss@^7.0.6:
 prepend-http@^1.0.1:
   version "1.0.4"
   resolved "http://registry.npm.taobao.org/prepend-http/download/prepend-http-1.0.4.tgz#d4f4562b0ce3696e41ac52d0e002e57a635dc6dc"
+
+prettier@1.16.3:
+  version "1.16.3"
+  resolved "http://registry.npm.taobao.org/prettier/download/prettier-1.16.3.tgz#8c62168453badef702f34b45b6ee899574a6a65d"
 
 private@^0.1.6:
   version "0.1.8"
@@ -4197,6 +4251,38 @@ vm-browserify@0.0.4:
   resolved "http://registry.npm.taobao.org/vm-browserify/download/vm-browserify-0.0.4.tgz#5d7ea45bbef9e4a6ff65f95438e0a87c357d5a73"
   dependencies:
     indexof "0.0.1"
+
+vue-hot-reload-api@^2.3.0:
+  version "2.3.3"
+  resolved "http://registry.npm.taobao.org/vue-hot-reload-api/download/vue-hot-reload-api-2.3.3.tgz#2756f46cb3258054c5f4723de8ae7e87302a1ccf"
+
+vue-loader@^15.7.0:
+  version "15.7.0"
+  resolved "http://registry.npm.taobao.org/vue-loader/download/vue-loader-15.7.0.tgz#27275aa5a3ef4958c5379c006dd1436ad04b25b3"
+  dependencies:
+    "@vue/component-compiler-utils" "^2.5.1"
+    hash-sum "^1.0.2"
+    loader-utils "^1.1.0"
+    vue-hot-reload-api "^2.3.0"
+    vue-style-loader "^4.1.0"
+
+vue-style-loader@^4.1.0:
+  version "4.1.2"
+  resolved "http://registry.npm.taobao.org/vue-style-loader/download/vue-style-loader-4.1.2.tgz#dedf349806f25ceb4e64f3ad7c0a44fba735fcf8"
+  dependencies:
+    hash-sum "^1.0.2"
+    loader-utils "^1.0.2"
+
+vue-template-compiler@^2.6.10:
+  version "2.6.10"
+  resolved "http://registry.npm.taobao.org/vue-template-compiler/download/vue-template-compiler-2.6.10.tgz#323b4f3495f04faa3503337a82f5d6507799c9cc"
+  dependencies:
+    de-indent "^1.0.2"
+    he "^1.1.0"
+
+vue-template-es2015-compiler@^1.9.0:
+  version "1.9.1"
+  resolved "http://registry.npm.taobao.org/vue-template-es2015-compiler/download/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
 
 vue@^2.6.10:
   version "2.6.10"
