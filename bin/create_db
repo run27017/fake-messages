@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('db/dev.sqlite3');
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database('db/dev.sqlite3')
+const createSeeds = require('./create_seeds')
 
 db.serialize(function() {
   db.run(`CREATE TABLE email(
@@ -11,23 +12,13 @@ db.serialize(function() {
     toName VARCHAR(255),
     toAddress VARCHAR(255) NOT NULL,
     subject TEXT,
+    type VARCHAR(255) DEFAULT 'text', 
     content TEXT NOT NULL, 
     createdAt DATETIME DEFAULT (datetime('now','localtime'))
   )`);
 
-  insertSeeds()
-});
+  createSeeds(db)
+})
 
-db.close();
-
-function insertSeeds() {
-  var stmt = db.prepare('INSERT INTO email(fromName, fromAddress, toName, toAddress, subject, content) VALUES (?, ?, ?, ?, ?, ?)');
-
-  for (var i = 1; i <= 10; i++) {
-    const content = new Array(100).join( '这是一封来自小红的长长的问候。')
-    stmt.run('小明', 'xiaoming@example.com', '小红', 'xiaohong@example.com', '一封长长的问候', content);
-  }
-
-  stmt.finalize();
-}
+db.close()
 

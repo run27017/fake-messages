@@ -5,7 +5,7 @@ function getListWithTotal (options, callback) {
   const output = {}
   const db = DB.create()
   db.serialize(() => {
-    const sql = `SELECT id, fromName, fromAddress, toName, toAddress, subject, substr(content, 1, 80) content, createdAt 
+    const sql = `SELECT id, fromName, fromAddress, toName, toAddress, subject, type, substr(content, 1, 80) content, createdAt 
       FROM email ORDER BY createdAt DESC LIMIT ? OFFSET ?`
     db.all(sql, [size, from - 1], function(err, emails) {
       if (err) {
@@ -44,15 +44,26 @@ function getOne (options, callback) {
   })
 }
 
-function create (email, callback) {
+function create (
+  {
+    fromName,
+    fromAddress,
+    toName,
+    toAddress,
+    subject,
+    type = 'text',
+    content
+  }, 
+  callback
+) {
   DB.wrap(db => {
-    db.run('INSERT INTO email(fromName, fromAddress, toName, toAddress, subject, content) VALUES (?, ?, ?, ?, ?, ?)', 
-      [email.fromName, email.fromAddress, email.toName, email.toAddress, email.subject, email.content], 
+    db.run('INSERT INTO email(fromName, fromAddress, toName, toAddress, subject, type, content) VALUES (?, ?, ?, ?, ?, ?, ?)', 
+      [fromName, fromAddress, toName, toAddress, subject, type, content], 
       function (err) {
         if (err) {
-          callback && callback(err);
+          callback && callback(err)
         } else {
-          callback && callback(null);
+          callback && callback(null)
         }
       }
     )

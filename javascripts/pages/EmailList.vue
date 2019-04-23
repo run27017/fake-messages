@@ -7,6 +7,9 @@
       <template slot-scope="{ row }" slot="to">
         {{ getNamedContact(row.toAddress, row.toName) }}
       </template>
+      <template slot-scope="{ row }" slot="content">
+        {{ row.content | plain(row.type) }}
+      </template>
       <template slot-scope="{ row }" slot="createdAt">
         {{ row.createdAt | datetime }}
       </template>
@@ -48,7 +51,7 @@ export default {
         },
         {
           title: '内容',
-          key: 'content'
+          slot: 'content'
         },
         {
           title: '时间',

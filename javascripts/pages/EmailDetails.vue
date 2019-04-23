@@ -20,10 +20,11 @@
       </ul>
     </Card>
     <Divider />
-    <div>
-      <pre style="margin: 10px; white-space: pre-line">
+    <div style="margin: 10px;">
+      <pre v-if="email.type === 'text'" style="white-space: pre-line">
         {{ email.content }}
       </pre>
+      <div v-if="email.type === 'html'" v-html="email.content"></div>
     </div>
   </div>
 </template>
