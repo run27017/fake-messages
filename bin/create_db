@@ -15,7 +15,14 @@ db.serialize(function() {
     type VARCHAR(255) DEFAULT 'text', 
     content TEXT NOT NULL, 
     createdAt DATETIME DEFAULT (datetime('now','localtime'))
-  )`);
+  )`)
+
+  db.run(`CREATE TABLE message(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+    toMobile VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    createdAt DATETIME DEFAULT (datetime('now','localtime'))
+  )`)
 
   createSeeds(db)
 })
