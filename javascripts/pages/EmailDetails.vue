@@ -3,11 +3,11 @@
     <ul v-if="email">
       <li>
         <span>收件人：</span>
-        <span>{{ getContactString(email.toAddress, email.toName) }}</span>
+        <span>{{ getNamedContact(email.toAddress, email.toName) }}</span>
       </li>
       <li>
         <span>发件人：</span>
-        <span>{{ getContactString(email.fromAddress, email.fromName) }}</span>
+        <span>{{ getNamedContact(email.fromAddress, email.fromName) }}</span>
       </li>
       <li>
         <span>时间：</span>
@@ -27,35 +27,16 @@
 
 <script>
 import axios from 'axios'
+import getNamedContact from '../mixins/getNamedContact'
 
 export default {
   name: 'EmailDetails',
-  filters: {
-    datetime (timestamps) {
-      const date = new Date(timestamps)
-      const year = date.getFullYear()
-      const month = date.getMonth()
-      const day = date.getDate()
-      const hours = date.getHours()
-      const minutes = date.getMinutes()
-      const seconds = date.getSeconds()
-      return `${year}年${month}月${day}日 ${hours}:${minutes}:${seconds}`
-    }
-  },
   data () {
     return {
       email: null
     }
   },
-  methods: {
-    getContactString (address, name) {
-      if (name) {
-        return name + ' <' + address + '>'
-      } else {
-        return address
-      }
-    },
-  },
+  mixins: [ getNamedContact ],
   created () {
     const id = this.$route.params.id
     axios.get(`/emails/${id}`)

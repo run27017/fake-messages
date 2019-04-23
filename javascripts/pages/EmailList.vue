@@ -2,10 +2,10 @@
   <div>
     <Table :columns="columns" :data="emails">
       <template slot-scope="{ row }" slot="from">
-        {{ getContactString(row.fromAddress, row.fromName) }}
+        {{ getNamedContact(row.fromAddress, row.fromName) }}
       </template>
       <template slot-scope="{ row }" slot="to">
-        {{ getContactString(row.toAddress, row.toName) }}
+        {{ getNamedContact(row.toAddress, row.toName) }}
       </template>
       <template slot-scope="{ row }" slot="createdAt">
         {{ row.createdAt | datetime }}
@@ -20,6 +20,7 @@
 
 <script>
 import axios from 'axios'
+import getNamedContact from '../mixins/getNamedContact'
 import 'iview/dist/styles/iview.css'
 import { Table, Page } from 'iview'
 
@@ -29,18 +30,7 @@ export default {
     Table,
     Page
   },
-  filters: {
-    datetime (timestamps) {
-      const date = new Date(timestamps)
-      const year = date.getFullYear()
-      const month = date.getMonth()
-      const day = date.getDate()
-      const hours = date.getHours()
-      const minutes = date.getMinutes()
-      const seconds = date.getSeconds()
-      return `${year}年${month}月${day}日 ${hours}:${minutes}:${seconds}`
-    }
-  },
+  mixins: [ getNamedContact ],
   data() { 
     return {
       columns: [
@@ -86,13 +76,6 @@ export default {
     }
   },
   methods: {
-    getContactString (address, name) {
-      if (name) {
-        return name + ' <' + address + '>'
-      } else {
-        return address
-      }
-    },
     pageNumberChanged (newPageNumber) {
       this.pageInfo.number = newPageNumber
       this.fetchEmails()
