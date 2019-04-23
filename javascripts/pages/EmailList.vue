@@ -10,6 +10,9 @@
       <template slot-scope="{ row }" slot="createdAt">
         {{ row.createdAt | datetime }}
       </template>
+      <template slot-scope="{ row }" slot="operators">
+        <router-link :to="{ name: 'email', params: { id: row.id } }">查看</router-link>
+      </template>
     </Table>
     <Page :total="pageInfo.total" :current="pageInfo.number" @on-change="pageNumberChanged" />
   </div>
@@ -21,6 +24,7 @@ import 'iview/dist/styles/iview.css'
 import { Table, Page } from 'iview'
 
 export default {
+  name: 'EmailList',
   components: {
     Table,
     Page
@@ -59,6 +63,10 @@ export default {
         {
           title: '时间',
           slot: 'createdAt'
+        },
+        {
+          title: '操作',
+          slot: 'operators'
         }
       ],
       emails: [],

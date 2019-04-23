@@ -15,6 +15,18 @@ router.get('/', function(req, res, next) {
   })
 })
 
+router.get('/:id', function(req, res, next) {
+  const { id } = req.params
+  EmailDao.getOne({ id }, function (err, email) {
+    if (err) {
+      console.error('从数据库中获取邮箱列表失败', err)
+      res.status(500).send({ error: err })
+    } else {
+      res.send({ email })
+    }
+  })
+})
+
 router.post('/', function(req, res, next) {
   EmailDao.create(req.body, function (err) {
     if (err) {

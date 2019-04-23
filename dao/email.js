@@ -29,6 +29,19 @@ function getListWithTotal (options, callback) {
   })
 }
 
+function getOne (options, callback) {
+  const { id } = options
+  DB.wrap(db => {
+    db.get('SELECT * from email WHERE id = ?', id, function (err, email) {
+      if (err) {
+        callback(err)
+      } else {
+        callback(null, email)
+      }
+    })
+  })
+}
+
 function create (email, callback) {
   DB.wrap(db => {
     db.run('INSERT INTO email(fromName, fromAddress, toName, toAddress, subject, content) VALUES (?, ?, ?, ?, ?, ?)', 
@@ -46,6 +59,7 @@ function create (email, callback) {
 
 module.exports = {
   getListWithTotal,
+  getOne,
   create: create
 }
 
