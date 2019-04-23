@@ -24,7 +24,8 @@ function insertSeeds() {
   var stmt = db.prepare('INSERT INTO email(fromName, fromAddress, toName, toAddress, subject, content) VALUES (?, ?, ?, ?, ?, ?)');
 
   for (var i = 1; i <= 10; i++) {
-    stmt.run('小明', 'xiaoming@example.com', '小红', 'xiaohong@example.com', 'subject', `content ${i}`);
+    const content = new Array(100).join( '这是一封来自小红的长长的问候。')
+    stmt.run('小明', 'xiaoming@example.com', '小红', 'xiaohong@example.com', '一封长长的问候', content);
   }
 
   stmt.finalize();
