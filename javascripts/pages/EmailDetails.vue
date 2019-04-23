@@ -1,36 +1,43 @@
 <template>
-  <div>
-    <ul v-if="email">
-      <li>
-        <span>收件人：</span>
-        <span>{{ getNamedContact(email.toAddress, email.toName) }}</span>
-      </li>
-      <li>
-        <span>发件人：</span>
-        <span>{{ getNamedContact(email.fromAddress, email.fromName) }}</span>
-      </li>
-      <li>
-        <span>时间：</span>
-        <span>{{ email.createdAt | datetime }}</span>
-      </li>
-      <li>
-        <span>主题：</span>
-        <span>{{ email.subject }}</span>
-      </li>
-      <li>
-        <span>内容：</span>
-        <span>{{ email.content }}</span>
-      </li>
-    </ul>
+  <div v-if="email">
+    <Card>
+      <p slot="title">
+        {{ email.subject }}
+      </p>
+      <ul style="list-style-type:none">
+        <li>
+          <span>收件人：</span>
+          <span>{{ getNamedContact(email.toAddress, email.toName) }}</span>
+        </li>
+        <li>
+          <span>时&nbsp;&nbsp;&nbsp;&nbsp;间：</span>
+          <span>{{ email.createdAt | datetime }}</span>
+        </li>
+        <li>
+          <span>发件人：</span>
+          <span>{{ getNamedContact(email.fromAddress, email.fromName) }}</span>
+        </li>
+      </ul>
+    </Card>
+    <Divider />
+    <div>
+      <pre style="margin: 10px; white-space: pre-line">
+        {{ email.content }}
+      </pre>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import getNamedContact from '../mixins/getNamedContact'
+import { Card } from 'iview'
 
 export default {
   name: 'EmailDetails',
+  components: {
+    Card
+  },
   data () {
     return {
       email: null
