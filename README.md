@@ -32,13 +32,13 @@
 
 ### 运行服务器
 
-运行开发环境：
+运行开发环境（默认端口3000）：
 
     $ yarn dev
 
 运行生产环境：
 
-    $ yarn start
+    $ PORT=3000 yarn start
 
 运行之后，访问`http://localhost:3000`.
 
