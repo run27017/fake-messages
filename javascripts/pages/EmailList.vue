@@ -17,6 +17,7 @@
         <router-link :to="{ name: 'email', params: { id: row.id } }">查看</router-link>
       </template>
     </Table>
+    <br>
     <Page :total="pageInfo.total" :current="pageInfo.number" @on-change="pageNumberChanged" />
   </div>
 </template>

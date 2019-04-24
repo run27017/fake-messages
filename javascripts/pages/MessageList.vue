@@ -5,6 +5,7 @@
         {{ row.createdAt | datetime }}
       </template>
     </Table>
+    <br>
     <Page :total="pageInfo.total" :current="pageInfo.number" @on-change="pageNumberChanged" />
   </div>
 </template>
