@@ -14,7 +14,11 @@
 
 删除数据库：
 
-    $ rm db/dev.sqlite3
+    $ rm db/default.sqlite3
+
+如果需要，创建种子数据用于开发：
+
+    $ bin/create_seeds
 
 ### 使用webpack打包客户端js文件
 
@@ -37,3 +41,4 @@
     $ yarn start
 
 运行之后，访问`http://localhost:3000`.
+

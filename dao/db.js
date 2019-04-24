@@ -1,7 +1,7 @@
 var sqlite3 = require('sqlite3').verbose();
 
 function create () {
-  return new sqlite3.Database('db/dev.sqlite3');
+  return new sqlite3.Database('db/default.sqlite3');
 }
 
 function close (db) {

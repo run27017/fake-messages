@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('db/dev.sqlite3')
-const createSeeds = require('./create_seeds')
+const db = require('../dao/db').create()
 
 db.serialize(function() {
   db.run(`CREATE TABLE email(
@@ -23,8 +21,6 @@ db.serialize(function() {
     content TEXT NOT NULL,
     createdAt DATETIME DEFAULT (datetime('now','localtime'))
   )`)
-
-  createSeeds(db)
 })
 
 db.close()
