@@ -28,6 +28,18 @@ module.exports = {
         use: ['style-loader', 'css-loader'],
       },
       {
+        test: /\.scss$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          'sass-loader'
+        ]
+      },
+      {
+        test: /\.md$/,
+        loader: 'vue-loader!vue-md-loader'
+      },
+      {
         test: /\.(ttf|woff|woff2|svg)$/,
         use: [
           {

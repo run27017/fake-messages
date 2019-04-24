@@ -5,13 +5,16 @@
         <Menu mode="horizontal" theme="dark" active-name="emails">
           <div class="layout-logo">Fame Messages</div>
           <div class="layout-nav">
-            <MenuItem name="emails" :to="{ name: 'emails' }">
+            <MenuItem name="emails" :to="{ name: 'emails' }" class="main-menu">
               <Icon type="ios-mail"></Icon>
               邮件
             </MenuItem>
-            <MenuItem name="messages" :to="{ name: 'messages' }">
+            <MenuItem name="messages" :to="{ name: 'messages' }" class="main-menu">
               <Icon type="ios-chatbubbles"></Icon>
               短信
+            </MenuItem>
+            <MenuItem name="help" :to="{ name: 'help' }" class="secondary-menu">
+              开发者帮助
             </MenuItem>
           </div>
         </Menu>
@@ -51,6 +54,12 @@ export default {
 }
 .layout-nav {
   margin-left: 140px;
+}
+.main-menu {
+  font-size: 1.2em;
+}
+.secondary-menu {
+  float: right !important;
 }
 .layout-content {
   margin: 40px 20px;
