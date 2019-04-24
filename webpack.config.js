@@ -42,6 +42,9 @@ module.exports = {
     ]
   },
   resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'javascripts')
+    },
     extensions: ['*', '.js', '.vue', '.json']
   },
   plugins: [

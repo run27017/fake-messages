@@ -23,8 +23,7 @@
 
 <script>
 import axios from 'axios'
-import getNamedContact from '../mixins/getNamedContact'
-import 'iview/dist/styles/iview.css'
+import getNamedContact from '@/mixins/getNamedContact'
 import { Table, Page } from 'iview'
 
 export default {

@@ -31,7 +31,7 @@
 
 <script>
 import axios from 'axios'
-import getNamedContact from '../mixins/getNamedContact'
+import getNamedContact from '@/mixins/getNamedContact'
 import { Card } from 'iview'
 
 export default {

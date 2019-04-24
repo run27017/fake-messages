@@ -11,8 +11,6 @@
 
 <script>
 import axios from 'axios'
-import getNamedContact from '../mixins/getNamedContact'
-import 'iview/dist/styles/iview.css'
 import { Table, Page } from 'iview'
 
 export default {
@@ -21,7 +19,6 @@ export default {
     Table,
     Page
   },
-  mixins: [ getNamedContact ],
   data() { 
     return {
       columns: [
