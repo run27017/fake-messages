@@ -13,7 +13,7 @@
 
 调用接口：
 
-    curl -XPOST http://localhost:3000/emails -d '
+    curl -XPOST http://host/emails -d '
       {
         "toAddress": "接收者的邮箱地址",
         "toName": "接收者的名字",
@@ -25,11 +25,13 @@
       }
     '
 
+其中`host`本站域名+端口一致，下同。
+
 ## 发送短信
 
 调用接口：
 
-    curl -XPOST http://localhost:3000/emails -d '
+    curl -XPOST http://host/emails -d '
       {
         "toMobile": "接收者的手机号",
         "content": "短信内容（尽量控制字数在140以内）"
