@@ -23,7 +23,7 @@
 
 <script>
 import axios from 'axios'
-import getNamedContact from '@/mixins/getNamedContact'
+import { getNamedContact } from '@/utils/emails'
 import { Table, Page } from 'iview'
 
 export default {
@@ -32,7 +32,6 @@ export default {
     Table,
     Page
   },
-  mixins: [ getNamedContact ],
   data() { 
     return {
       columns: [
@@ -78,6 +77,7 @@ export default {
     }
   },
   methods: {
+    getNamedContact,
     pageNumberChanged (newPageNumber) {
       this.pageInfo.number = newPageNumber
       this.fetchEmails()

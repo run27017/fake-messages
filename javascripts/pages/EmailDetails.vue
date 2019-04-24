@@ -19,7 +19,6 @@
         </li>
       </ul>
     </Card>
-    <Divider />
     <div style="margin: 10px;">
       <pre v-if="email.type === 'text'" style="white-space: pre-line">
         {{ email.content }}
@@ -31,7 +30,7 @@
 
 <script>
 import axios from 'axios'
-import getNamedContact from '@/mixins/getNamedContact'
+import { getNamedContact } from '@/utils/emails'
 import { Card } from 'iview'
 
 export default {
@@ -44,7 +43,9 @@ export default {
       email: null
     }
   },
-  mixins: [ getNamedContact ],
+  methods: {
+    getNamedContact
+  },
   created () {
     const id = this.$route.params.id
     axios.get(`/emails/${id}`)
