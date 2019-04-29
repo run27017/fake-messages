@@ -3,7 +3,7 @@
     <Layout class="layout">
       <Header>
         <Menu mode="horizontal" theme="dark" active-name="emails">
-          <div class="layout-logo">Fame Messages</div>
+          <div class="layout-logo">Fake Messages</div>
           <div class="layout-nav">
             <MenuItem name="emails" :to="{ name: 'emails' }" class="main-menu">
               <Icon type="ios-mail"></Icon>

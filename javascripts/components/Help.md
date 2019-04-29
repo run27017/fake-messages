@@ -13,7 +13,7 @@
 
 调用接口：
 
-    curl -XPOST http://host/emails -d '
+    curl -XPOST -H 'Content-Type: application/json' http://host/emails -d '
       {
         "toAddress": "接收者的邮箱地址",
         "toName": "接收者的名字",
@@ -31,10 +31,9 @@
 
 调用接口：
 
-    curl -XPOST http://host/emails -d '
+    curl -XPOST -H 'Content-Type: application/json' http://localhost:3000/messages -d '
       {
         "toMobile": "接收者的手机号",
         "content": "短信内容（尽量控制字数在140以内）"
       }
     '
-
