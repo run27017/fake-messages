@@ -31,7 +31,7 @@
 
 调用接口：
 
-    curl -XPOST -H 'Content-Type: application/json' http://localhost:3000/messages -d '
+    curl -XPOST -H 'Content-Type: application/json' http://host/messages -d '
       {
         "toMobile": "接收者的手机号",
         "content": "短信内容（尽量控制字数在140以内）"
