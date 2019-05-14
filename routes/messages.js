@@ -16,14 +16,18 @@ router.get('/', function(req, res, next) {
 })
 
 router.post('/', function(req, res, next) {
-  MessageDao.create(req.body, function (err) {
-    if (err) {
-      console.error('在数据库中创建短信失败', err)
-      res.status(500).send({ error: err })
-    } else {
-      res.status(201).send('created')
-    }
-  })
+  if (!req.body.toMobile) {
+    res.status(400).send({ error: 'toMobile不能为空白' })
+  } else {
+    MessageDao.create(req.body, function (err) {
+      if (err) {
+        console.error('在数据库中创建短信失败', err)
+        res.status(500).send({ error: err })
+      } else {
+        res.status(201).send('created')
+      }
+    })
+  }
 })
 
 module.exports = router

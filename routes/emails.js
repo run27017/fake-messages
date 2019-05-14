@@ -1,6 +1,6 @@
-var express = require('express')
-var router = express.Router()
-var EmailDao = require('../dao/email')
+const express = require('express')
+const router = express.Router()
+const EmailDao = require('../dao/email')
 
 router.get('/', function(req, res, next) {
   const from = parseInt(req.query.from || 1)
@@ -28,14 +28,18 @@ router.get('/:id', function(req, res, next) {
 })
 
 router.post('/', function(req, res, next) {
-  EmailDao.create(req.body, function (err) {
-    if (err) {
-      console.error('在数据库中创建邮箱失败', err)
-      res.status(500).send({ error: err })
-    } else {
-      res.status(201).send('created')
-    }
-  })
+  if (!req.body.toAddress) {
+    res.status(400).send({ error: 'toAddress不能为空白' })
+  } else {
+    EmailDao.create(req.body, function (err) {
+      if (err) {
+        console.error('在数据库中创建邮箱失败', err)
+        res.status(500).send({ error: err })
+      } else {
+        res.status(201).send('created')
+      }
+    })
+  }
 })
 
 module.exports = router
