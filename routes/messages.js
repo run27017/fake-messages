@@ -1,6 +1,6 @@
-var express = require('express')
-var router = express.Router()
-var MessageDao = require('../dao/message')
+const express = require('express')
+const router = express.Router()
+const MessageDao = require('../dao/message')
 
 router.get('/', function(req, res, next) {
   const from = parseInt(req.query.from || 1)
@@ -31,4 +31,3 @@ router.post('/', function(req, res, next) {
 })
 
 module.exports = router
-
