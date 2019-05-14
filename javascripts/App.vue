@@ -20,7 +20,9 @@
         </Menu>
       </Header>
       <Content class="layout-content">
-        <router-view></router-view>
+        <keep-alive>
+          <router-view></router-view>
+        </keep-alive>
       </Content>
     </Layout>
   </div>
