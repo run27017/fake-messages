@@ -1,6 +1,7 @@
 <template>
   <div>
-    <Table :row-class-name="tableRowClassName" :columns="columns" :data="messages">
+    <Table :row-class-name="tableRowClassName" :columns="columns" :data="messages"
+           @on-row-click="readRow">
       <template slot-scope="{ row }" slot="createdAt">
         {{ row.createdAt | datetime }}
       </template>
@@ -71,6 +72,9 @@ export default {
     },
     tableRowClassName (row, index) {
       return row.isNew ? 'new-item' : ''
+    },
+    readRow (_, index) {
+      this.messages[index].isNew = false
     }
   },
   created () {

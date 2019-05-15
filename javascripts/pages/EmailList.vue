@@ -1,6 +1,7 @@
 <template>
   <div>
-    <Table :row-class-name="tableRowClassName" :columns="columns" :data="emails">
+    <Table :row-class-name="tableRowClassName" :columns="columns" :data="emails"
+           @on-row-click="readRow">
       <template slot-scope="{ row }" slot="from">
         {{ toNamedContact(row.fromAddress, row.fromName) }}
       </template>
@@ -97,6 +98,9 @@ export default {
     },
     tableRowClassName (row, index) {
       return row.isNew ? 'new-item' : ''
+    },
+    readRow (_, index) {
+      this.emails[index].isNew = false
     }
   },
   created () {
