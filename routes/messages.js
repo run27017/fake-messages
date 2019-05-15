@@ -25,7 +25,8 @@ router.post('/', function(req, res, next) {
         console.error('在数据库中创建短信失败', err)
         res.status(500).send({ error: err })
       } else {
-        MessageDao.getOne({ id }, function (err, message) {
+        MessageDao.getOne(id, function (err, message) {
+          console.log('message', message)
           if (err) {
             console.error('从数据库中获取短信失败', err)
             res.status(500).send({ error: err })

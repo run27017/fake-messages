@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Table :columns="columns" :data="messages">
+    <Table :row-class-name="tableRowClassName" :columns="columns" :data="messages">
       <template slot-scope="{ row }" slot="createdAt">
         {{ row.createdAt | datetime }}
       </template>
@@ -68,15 +68,20 @@ export default {
         .catch(function () {
           console.log('error', arguments);
         })
+    },
+    tableRowClassName (row, index) {
+      return row.isNew ? 'new-item' : ''
     }
   },
   created () {
     this.fetchMessages()
+    // 因为使用了keep-alive，不需要removeEventListener之类的操作
     websocket.addEventListener('MessageReceived', ({ data }) => {
-      if (this.pageInfo.number === 1) {
-        this.fetchMessages()
-      }
+      const message = Object.assign({}, data)
+      message.isNew = true
+      this.messages.unshift(message)
     })
   }
 }
 </script>
+

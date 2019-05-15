@@ -1,4 +1,4 @@
-function getNamedContact (address, name) {
+function toNamedContact (address, name) {
   if (name) {
     return name + ' <' + address + '>'
   } else {
@@ -7,6 +7,6 @@ function getNamedContact (address, name) {
 }
 
 export {
-  getNamedContact
+  toNamedContact
 }
 

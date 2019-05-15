@@ -31,8 +31,7 @@ function getListWithTotal (options, callback) {
   })
 }
 
-function getOne (options, callback) {
-  const { id } = options
+function getOne (id, callback) {
   DB.wrap(db => {
     db.get('SELECT * from message WHERE id = ?', id, function (err, message) {
       if (err) {
@@ -58,7 +57,7 @@ function create (
         if (err) {
           callback && callback(err)
         } else {
-          callback && callback(null)
+          callback && callback(null, this.lastID)
         }
       }
     )

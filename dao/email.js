@@ -31,8 +31,7 @@ function getListWithTotal (options, callback) {
   })
 }
 
-function getOne (options, callback) {
-  const { id } = options
+function getOne (id, callback) {
   DB.wrap(db => {
     db.get('SELECT * from email WHERE id = ?', id, function (err, email) {
       if (err) {

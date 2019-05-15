@@ -18,7 +18,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/:id', function(req, res, next) {
   const { id } = req.params
-  EmailDao.getOne({ id }, function (err, email) {
+  EmailDao.getOne(id, function (err, email) {
     if (err) {
       console.error('从数据库中获取邮件失败', err)
       res.status(500).send({ error: err })
@@ -37,7 +37,7 @@ router.post('/', function(req, res, next) {
         console.error('在数据库中创建邮箱失败', err)
         res.status(500).send({ error: err })
       } else {
-        EmailDao.getOne({ id }, function (err, email) {
+        EmailDao.getOne(id, function (err, email) {
           if (err) {
             console.error('从数据库中获取邮件失败', err)
             res.status(500).send({ error: err })

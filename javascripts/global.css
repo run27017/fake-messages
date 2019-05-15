@@ -1,0 +1,9 @@
+/**
+ * 该文件的内容为全局引入的css类名，可在项目中直接引用。
+ */
+
+.ivu-table .new-item td {
+  background-color: #2db7f5;
+  color: #fff;
+}
+

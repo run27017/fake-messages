@@ -4,6 +4,7 @@ import App from './App.vue'
 import routes from './routes'
 import './filters'
 import 'iview/dist/styles/iview.css'
+import './global.css'
 
 Vue.use(VueRouter)
 

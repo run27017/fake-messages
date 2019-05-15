@@ -1,11 +1,11 @@
 <template>
   <div>
-    <Table :columns="columns" :data="emails">
+    <Table :row-class-name="tableRowClassName" :columns="columns" :data="emails">
       <template slot-scope="{ row }" slot="from">
-        {{ getNamedContact(row.fromAddress, row.fromName) }}
+        {{ toNamedContact(row.fromAddress, row.fromName) }}
       </template>
       <template slot-scope="{ row }" slot="to">
-        {{ getNamedContact(row.toAddress, row.toName) }}
+        {{ toNamedContact(row.toAddress, row.toName) }}
       </template>
       <template slot-scope="{ row }" slot="content">
         {{ row.content | plain(row.type) }}
@@ -25,7 +25,7 @@
 <script>
 import axios from 'axios'
 import websocket from '@/websocket'
-import { getNamedContact } from '@/utils/emails'
+import { toNamedContact } from '@/utils/emails'
 import { Table, Page } from 'iview'
 
 export default {
@@ -79,7 +79,7 @@ export default {
     }
   },
   methods: {
-    getNamedContact,
+    toNamedContact,
     pageNumberChanged (newPageNumber) {
       this.pageInfo.number = newPageNumber
       this.fetchEmails()
@@ -94,14 +94,18 @@ export default {
         .catch(function () {
           console.log('error', arguments);
         })
+    },
+    tableRowClassName (row, index) {
+      return row.isNew ? 'new-item' : ''
     }
   },
   created () {
     this.fetchEmails()
+    // 因为使用了keep-alive，不需要removeEventListener之类的操作
     websocket.addEventListener('EmailReceived', ({ data }) => {
-      if (this.pageInfo.number === 1) {
-        this.fetchEmails()
-      }
+      const email = Object.assign({}, data)
+      email.isNew = true
+      this.emails.unshift(email)
     })
   }
 }

@@ -7,7 +7,7 @@
       <ul style="list-style-type:none">
         <li>
           <span>收件人：</span>
-          <span>{{ getNamedContact(email.toAddress, email.toName) }}</span>
+          <span>{{ toNamedContact(email.toAddress, email.toName) }}</span>
         </li>
         <li>
           <span>时&nbsp;&nbsp;&nbsp;&nbsp;间：</span>
@@ -15,7 +15,7 @@
         </li>
         <li>
           <span>发件人：</span>
-          <span>{{ getNamedContact(email.fromAddress, email.fromName) }}</span>
+          <span>{{ toNamedContact(email.fromAddress, email.fromName) }}</span>
         </li>
       </ul>
     </Card>
@@ -30,7 +30,7 @@
 
 <script>
 import axios from 'axios'
-import { getNamedContact } from '@/utils/emails'
+import { toNamedContact } from '@/utils/emails'
 import { Card } from 'iview'
 
 export default {
@@ -44,7 +44,7 @@ export default {
     }
   },
   methods: {
-    getNamedContact
+    toNamedContact
   },
   created () {
     const id = this.$route.params.id
