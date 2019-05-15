@@ -2,7 +2,7 @@
   <div>
     <Layout class="layout">
       <Header>
-        <Menu mode="horizontal" theme="dark" active-name="emails">
+        <Menu mode="horizontal" theme="dark" :active-name="activeMenu">
           <div class="layout-logo">Fake Messages</div>
           <div class="layout-nav">
             <MenuItem name="emails" :to="{ name: 'emails' }" class="main-menu">
@@ -42,7 +42,19 @@ export default {
     MenuItem,
     Icon
   },
+  data () {
+    return {
+      activeMenu: ''
+    }
+  },
   created () {
+    const hash = window.location.hash
+    if (hash === '#/emails' || hash.startsWith('#/emails/')) {
+      this.activeMenu = 'emails'
+    } else if (hash === '#/messages' || hash.startsWith('#/messages/')){
+      this.activeMenu = 'messages'
+    }
+
     websocket.connect()
   }
 }
