@@ -31,6 +31,19 @@ function getListWithTotal (options, callback) {
   })
 }
 
+function getOne (options, callback) {
+  const { id } = options
+  DB.wrap(db => {
+    db.get('SELECT * from message WHERE id = ?', id, function (err, message) {
+      if (err) {
+        callback(err)
+      } else {
+        callback(null, message)
+      }
+    })
+  })
+}
+
 function create (
   {
     toMobile,
@@ -54,6 +67,7 @@ function create (
 
 module.exports = {
   getListWithTotal,
-  create: create
+  getOne,
+  create
 }
 

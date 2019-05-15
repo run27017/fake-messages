@@ -30,6 +30,7 @@
 
 <script>
 import { Layout, Header, Content, Menu, MenuItem, Icon } from 'iview'
+import websocket from './websocket'
 
 export default {
   name: 'App',
@@ -40,6 +41,9 @@ export default {
     Menu,
     MenuItem,
     Icon
+  },
+  created () {
+    websocket.connect()
   }
 }
 </script>

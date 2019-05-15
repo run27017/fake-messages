@@ -63,7 +63,7 @@ function create (
         if (err) {
           callback && callback(err)
         } else {
-          callback && callback(null)
+          callback && callback(null, this.lastID)
         }
       }
     )
@@ -73,6 +73,6 @@ function create (
 module.exports = {
   getListWithTotal,
   getOne,
-  create: create
+  create
 }
 

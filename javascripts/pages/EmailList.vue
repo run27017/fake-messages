@@ -24,6 +24,7 @@
 
 <script>
 import axios from 'axios'
+import websocket from '@/websocket'
 import { getNamedContact } from '@/utils/emails'
 import { Table, Page } from 'iview'
 
@@ -97,6 +98,12 @@ export default {
   },
   created () {
     this.fetchEmails()
+    websocket.addEventListener('EmailReceived', ({ data }) => {
+      if (this.pageInfo.number === 1) {
+        this.fetchEmails()
+      }
+    })
   }
 }
 </script>
+

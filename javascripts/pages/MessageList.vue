@@ -12,6 +12,7 @@
 
 <script>
 import axios from 'axios'
+import websocket from '@/websocket'
 import { Table, Page } from 'iview'
 
 export default {
@@ -71,6 +72,11 @@ export default {
   },
   created () {
     this.fetchMessages()
+    websocket.addEventListener('MessageReceived', ({ data }) => {
+      if (this.pageInfo.number === 1) {
+        this.fetchMessages()
+      }
+    })
   }
 }
 </script>
