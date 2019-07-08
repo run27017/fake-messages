@@ -20,7 +20,7 @@
         </Menu>
       </Header>
       <Content class="layout-content">
-        <keep-alive>
+        <keep-alive include="EmailList">
           <router-view></router-view>
         </keep-alive>
       </Content>
