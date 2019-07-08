@@ -7,6 +7,7 @@ router.get('/', function(req, res, next) {
   const from = parseInt(req.query.from || 1)
   const size = parseInt(req.query.size || 10)
   EmailDao.getListWithTotal({ from, size }, function (err, emails, total) {
+    emails = simplifyContent(emails)
     if (err) {
       console.error('从数据库中获取邮箱列表失败', err)
       res.status(500).send({ error: err })
@@ -53,6 +54,21 @@ router.post('/', function(req, res, next) {
     })
   }
 })
+
+function simplifyContent (emails) {
+  emails.forEach(email => {
+    if (email.type === 'text') {
+      email.content = email.content.substr(0, 80)
+    } else if (email.type === 'html') {
+      email.content = stripHTMLTags(email.content).substr(0, 80)
+    }
+  })
+  return emails
+}
+
+function stripHTMLTags (content) {
+  return content.replace(/<[^>]*>?/gm, '')
+}
 
 module.exports = router
 

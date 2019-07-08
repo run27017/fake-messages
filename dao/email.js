@@ -5,7 +5,7 @@ function getListWithTotal (options, callback) {
   const output = {}
   const db = DB.create()
   db.serialize(() => {
-    const sql = `SELECT id, fromName, fromAddress, toName, toAddress, subject, type, substr(content, 1, 80) content, createdAt 
+    const sql = `SELECT id, fromName, fromAddress, toName, toAddress, subject, type, content, createdAt 
       FROM email ORDER BY createdAt DESC LIMIT ? OFFSET ?`
     db.all(sql, [size, from - 1], function(err, emails) {
       if (err) {
