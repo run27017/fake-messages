@@ -26,7 +26,7 @@ function createHtmlEmail (stmt, createdAt) {
 
 function createEmails (db) {
   const total = 10
-  const stmt = db.prepare('INSERT INTO email(fromName, fromAddress, toName, toAddress, subject, type, content, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
+  const stmt = db.prepare('INSERT INTO emails(fromName, fromAddress, toName, toAddress, subject, type, content, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
   let createdAt = subSeconds(new Date(), total)
 
   for (var i = 1; i <= total; i++) {
@@ -45,7 +45,7 @@ function createEmails (db) {
 
 function createMessages (db) {
   const total = 10
-  const stmt = db.prepare('INSERT INTO message(toMobile, content, createdAt) VALUES (?, ?, ?)')
+  const stmt = db.prepare('INSERT INTO messages(toMobile, content, createdAt) VALUES (?, ?, ?)')
   let createdAt = subSeconds(new Date(), total)
 
   for (var i = 1; i <= total; i++) {

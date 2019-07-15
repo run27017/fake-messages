@@ -26,12 +26,11 @@ router.post('/', function(req, res, next) {
         res.status(500).send({ error: err })
       } else {
         MessageDao.getOne(id, function (err, message) {
-          console.log('message', message)
           if (err) {
             console.error('从数据库中获取短信失败', err)
             res.status(500).send({ error: err })
           } else {
-            res.status(201).send('created')
+            res.status(201).send(message)
             websocket.broadcast({
               event: 'MessageReceived',
               data: message

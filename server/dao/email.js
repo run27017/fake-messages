@@ -6,7 +6,7 @@ function getListWithTotal (options, callback) {
   const db = DB.create()
   db.serialize(() => {
     const sql = `SELECT id, fromName, fromAddress, toName, toAddress, subject, type, content, createdAt 
-      FROM email ORDER BY createdAt DESC LIMIT ? OFFSET ?`
+      FROM emails ORDER BY createdAt DESC LIMIT ? OFFSET ?`
     db.all(sql, [size, from - 1], function(err, emails) {
       if (err) {
         output.error = err
@@ -14,7 +14,7 @@ function getListWithTotal (options, callback) {
         output.emails = emails
       }
     })
-    db.get('SELECT count(*) as count FROM email', function (err, { count }) {
+    db.get('SELECT count(*) as count FROM emails', function (err, { count }) {
       if (err) {
         output.error = err
       } else {
@@ -33,7 +33,7 @@ function getListWithTotal (options, callback) {
 
 function getOne (id, callback) {
   DB.wrap(db => {
-    db.get('SELECT * from email WHERE id = ?', id, function (err, email) {
+    db.get('SELECT * from emails WHERE id = ?', id, function (err, email) {
       if (err) {
         callback(err)
       } else {
@@ -56,7 +56,7 @@ function create (
   callback
 ) {
   DB.wrap(db => {
-    db.run('INSERT INTO email(fromName, fromAddress, toName, toAddress, subject, type, content) VALUES (?, ?, ?, ?, ?, ?, ?)', 
+    db.run('INSERT INTO emails(fromName, fromAddress, toName, toAddress, subject, type, content) VALUES (?, ?, ?, ?, ?, ?, ?)', 
       [fromName, fromAddress, toName, toAddress, subject, type, content], 
       function (err) {
         if (err) {

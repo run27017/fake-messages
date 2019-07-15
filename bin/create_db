@@ -3,7 +3,7 @@
 const db = require('../server/dao/db').create()
 
 db.serialize(function() {
-  db.run(`CREATE TABLE email(
+  db.run(`CREATE TABLE emails (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
     fromName VARCHAR(255),
     fromAddress VARCHAR(255) NOT NULL,
@@ -15,7 +15,7 @@ db.serialize(function() {
     createdAt DATETIME DEFAULT (datetime('now','localtime'))
   )`)
 
-  db.run(`CREATE TABLE message(
+  db.run(`CREATE TABLE messages (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
     toMobile VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,

@@ -6,7 +6,7 @@ function getListWithTotal (options, callback) {
   let error = null
   const db = DB.create()
   db.serialize(() => {
-    const sql = `SELECT * FROM message ORDER BY createdAt DESC LIMIT ? OFFSET ?`
+    const sql = `SELECT * FROM messages ORDER BY createdAt DESC LIMIT ? OFFSET ?`
     db.all(sql, [size, from - 1], function(err, messages) {
       if (err) {
         error = err
@@ -14,7 +14,7 @@ function getListWithTotal (options, callback) {
         output.messages = messages
       }
     })
-    db.get('SELECT count(*) as count FROM message', function (err, { count }) {
+    db.get('SELECT count(*) as count FROM messages', function (err, { count }) {
       if (err) {
         error = err
       } else {
@@ -33,7 +33,7 @@ function getListWithTotal (options, callback) {
 
 function getOne (id, callback) {
   DB.wrap(db => {
-    db.get('SELECT * from message WHERE id = ?', id, function (err, message) {
+    db.get('SELECT * from messages WHERE id = ?', id, function (err, message) {
       if (err) {
         callback(err)
       } else {
@@ -51,7 +51,7 @@ function create (
   callback
 ) {
   DB.wrap(db => {
-    db.run('INSERT INTO message(toMobile, content) VALUES (?, ?)', 
+    db.run('INSERT INTO messages(toMobile, content) VALUES (?, ?)', 
       [toMobile, content], 
       function (err) {
         if (err) {
