@@ -3,8 +3,8 @@
 /**
  * Module dependencies.
  */
-const websocket = require('../websocket');
-const app = require('../app');
+const websocket = require('../server/websocket');
+const app = require('../server/app');
 const debug = require('debug')('fake-messages:server');
 const http = require('http');
 

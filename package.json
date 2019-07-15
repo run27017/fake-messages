@@ -9,6 +9,9 @@
     "server:dev": "cross-env DEBUG=fake-messages:* nodemon node ./bin/www",
     "dev": "node bin/dev_server"
   },
+  "nodemonConfig": {
+    "watch": "server"
+  },
   "dependencies": {
     "axios": "^0.18.0",
     "debug": "~2.6.9",

@@ -1,5 +1,11 @@
 # fake-messages
 
+## 目录结构
+
+- `/server`: 服务器的 js 代码。
+- `/javascripts`: Webpack 打包用的源代码。
+- `/public`: 静态文件，包括 Webpack 打包后的代码。
+
 ## 快速上手
 
 ### 安装依赖包

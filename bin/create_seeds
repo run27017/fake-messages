@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const { addSeconds, subSeconds } = require('date-fns')
-const db = require('../dao/db').create()
+const db = require('../server/dao/db').create()
 
 function createTextEmail (stmt, createdAt) {
   const subject = '一封长长的问候'

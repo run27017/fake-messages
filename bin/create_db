@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const db = require('../dao/db').create()
+const db = require('../server/dao/db').create()
 
 db.serialize(function() {
   db.run(`CREATE TABLE email(
