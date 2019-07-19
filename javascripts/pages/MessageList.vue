@@ -80,7 +80,7 @@ export default {
   created () {
     this.fetchMessages()
     // 因为使用了keep-alive，不需要removeEventListener之类的操作
-    websocket.addEventListener('MessageReceived', ({ data }) => {
+    websocket.addEventListener('NewMessage', ({ data }) => {
       const message = Object.assign({}, data)
       message.isNew = true
       this.messages.unshift(message)
