@@ -5,6 +5,9 @@
       <template slot-scope="{ row }" slot="createdAt">
         {{ row.createdAt | datetime }}
       </template>
+      <template slot-scope="{ row }" slot="tags">
+        {{ row.tags.join(', ') }}
+      </template>
     </Table>
     <br>
     <Page :total="pageInfo.total" :current="pageInfo.number" @on-change="pageNumberChanged" />
@@ -28,6 +31,10 @@ export default {
         {
           title: '接收手机',
           key: 'toMobile'
+        },
+        {
+          title: '标签',
+          slot: 'tags'
         },
         {
           title: '内容',

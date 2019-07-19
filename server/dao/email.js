@@ -3,8 +3,9 @@ const db = require('./db')
 const getAllStatement = db.prepare('SELECT * FROM emails ORDER BY createdAt desc LIMIT ? OFFSET ?')
 const getOneStatement = db.prepare('SELECT * FROM emails WHERE id = ?')
 const getTotalStatement = db.prepare('SELECT count(*) AS total FROM emails')
-const insertEmailStatement = db.prepare(`INSERT INTO emails(fromName, fromAddress, toName, toAddress, subject, type, content)
+const insertStatement = db.prepare(`INSERT INTO emails(fromName, fromAddress, toName, toAddress, subject, type, content)
   VALUES (@fromName, @fromAddress, @toName, @toAddress, @subject, @type, @content)`)
+
 const getTagsStatement = db.prepare(`SELECT * FROM tags WHERE targetType = "Project" and targetId = ?`)
 const insertTagStatement = db.prepare(`INSERT INTO tags(name, targetType, targetId)
   VALUES (@name, 'Project', @targetId)`)
@@ -25,16 +26,20 @@ const getOne = db.transaction(id => {
   return email
 })
 
-const create = db.transaction(({ tags, ...params }) => {
-  const { lastInsertRowid } = insertEmailStatement.run(params)
-  for (const tag of tags) {
-    insertTagStatement.run({ name: tag, targetId: lastInsertRowid })
-  }
-  return getOne(lastInsertRowid)
+const create = db.transaction(({ tags = [], ...params }) => {
+  const { lastInsertRowid: emailId } = insertStatement.run(params)
+  insertTags(emailId, tags)
+  return getOne(emailId)
 })
 
 function getTags (emailId) {
   return getTagsStatement.all(emailId).map(tag => tag.name)
+}
+
+function insertTags (emailId, tags) {
+  for (const tag of tags) {
+    insertTagStatement.run({ name: tag, targetId: emailId })
+  }
 }
 
 module.exports = {
