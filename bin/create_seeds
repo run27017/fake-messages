@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const { addSeconds, subSeconds } = require('date-fns')
+const { addSeconds, subSeconds, format } = require('date-fns')
 const db = require('../server/dao/db')
 
 const insertEmailStatement = db.prepare(`
@@ -36,7 +36,7 @@ function createEmail ({ subject, content, createdAt }) {
     subject,
     type: 'text',
     content,
-    createdAt: createdAt.toString()
+    createdAt: normalizeDatetime(createdAt)
   })
 }
 
@@ -68,9 +68,13 @@ function createMessages () {
 
   for (let i = 1; i <= total; i++) {
     const content = new Array(10).join('来自小红的简短的问候。')
-    insertMessageStatement.run({ toMobile: '#001', content, createdAt: createdAt.toString() })
+    insertMessageStatement.run({ toMobile: '#001', content, createdAt: normalizeDatetime(createdAt) })
     createdAt = addSeconds(createdAt, 1)
   }
+}
+
+function normalizeDatetime (date) {
+  return format(date, 'YYYY-MM-DD hh:mm:ss')
 }
 
 createEmails()

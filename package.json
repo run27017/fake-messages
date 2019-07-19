@@ -10,7 +10,7 @@
     "dev": "node bin/dev_server"
   },
   "nodemonConfig": {
-    "watch": "server"
+    "watch": ["server", "db/default.sqlite3"]
   },
   "dependencies": {
     "axios": "^0.18.0",

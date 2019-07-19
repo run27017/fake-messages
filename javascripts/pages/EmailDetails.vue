@@ -17,13 +17,17 @@
           <span>发件人：</span>
           <span>{{ toNamedContact(email.fromAddress, email.fromName) }}</span>
         </li>
+        <li>
+          <span>标&nbsp;&nbsp;&nbsp;&nbsp;签：</span>
+          <span>{{ email.tags.join(', ') }}</span>
+        </li>
       </ul>
     </Card>
     <div style="margin: 10px;">
-      <pre v-if="email.type === 'text'" style="white-space: pre-line">
+      <div v-if="email.type === 'html'" v-html="email.content"></div>
+      <pre v-else style="white-space: pre-line">
         {{ email.content }}
       </pre>
-      <div v-if="email.type === 'html'" v-html="email.content"></div>
     </div>
   </div>
 </template>

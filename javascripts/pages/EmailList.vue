@@ -8,6 +8,9 @@
       <template slot-scope="{ row }" slot="to">
         {{ toNamedContact(row.toAddress, row.toName) }}
       </template>
+      <template slot-scope="{ row }" slot="tags">
+        {{ row.tags.join(', ') }}
+      </template>
       <template slot-scope="{ row }" slot="content">
         {{ row.content | plain(row.type) }}
       </template>
@@ -45,6 +48,10 @@ export default {
         {
           title: '收件人',
           slot: 'to'
+        },
+        {
+          title: '标签',
+          slot: 'tags'
         },
         {
           title: '主题',

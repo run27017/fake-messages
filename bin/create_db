@@ -21,5 +21,12 @@ db.exec(`CREATE TABLE messages (
   createdAt DATETIME DEFAULT (datetime('now','localtime'))
 )`)
 
+db.exec(`CREATE TABLE tags (
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+  name VARCHAR(255) NOT NULL,
+  targetType VARCHAR(255) NOT NULL,
+  targetId INTEGER NOT NULL
+)`)
+
 db.close()
 
