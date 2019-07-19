@@ -1,11 +1,10 @@
-const Database = require('better-sqlite3')
-const db = new Database('db/default.sqlite3', { verbose: console.log })
+const db = require('./db')
 
-const getAllStatement = db.prepare('select * from emails order by createdAt desc limit ? offset ?')
-const getOneStatement = db.prepare('select * from emails where id = ?')
-const getTotalStatement = db.prepare('select count(*) as total from emails')
-const insertStatement = db.prepare(`insert into emails(fromName, fromAddress, toName, toAddress, subject, type, content)
-  values(@fromName, @fromAddress, @toName, @toAddress, @subject, @type, @content)`)
+const getAllStatement = db.prepare('SELECT * FROM emails ORDER BY createdAt desc LIMIT ? OFFSET ?')
+const getOneStatement = db.prepare('SELECT * FROM emails WHERE id = ?')
+const getTotalStatement = db.prepare('SELECT count(*) AS total FROM emails')
+const insertStatement = db.prepare(`INSERT INTO emails(fromName, fromAddress, toName, toAddress, subject, type, content)
+  VALUES (@fromName, @fromAddress, @toName, @toAddress, @subject, @type, @content)`)
 
 function getAll (options) {
   const { from = 1, size = 10 } = options

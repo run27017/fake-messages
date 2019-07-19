@@ -1,22 +1,4 @@
-var sqlite3 = require('sqlite3').verbose();
+const Database = require('better-sqlite3')
+const db = new Database('db/default.sqlite3', { verbose: console.log })
 
-function create () {
-  return new sqlite3.Database('db/default.sqlite3');
-}
-
-function close (db) {
-  db.close()
-}
-
-function wrap (run) {
-  const db = create()
-  run(db)
-  close(db)
-}
-
-module.exports = {
-  create,
-  close,
-  wrap
-}
-
+module.exports = db

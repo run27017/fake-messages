@@ -1,27 +1,25 @@
 #!/usr/bin/env node
 
-const db = require('../server/dao/db').create()
+const db = require('../server/dao/db')
 
-db.serialize(function() {
-  db.run(`CREATE TABLE emails (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-    fromName VARCHAR(255),
-    fromAddress VARCHAR(255) NOT NULL,
-    toName VARCHAR(255),
-    toAddress VARCHAR(255) NOT NULL,
-    subject TEXT,
-    type VARCHAR(255) DEFAULT 'text', 
-    content TEXT NOT NULL, 
-    createdAt DATETIME DEFAULT (datetime('now','localtime'))
-  )`)
+db.exec(`CREATE TABLE emails (
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+  fromName VARCHAR(255),
+  fromAddress VARCHAR(255) NOT NULL,
+  toName VARCHAR(255),
+  toAddress VARCHAR(255) NOT NULL,
+  subject TEXT,
+  type VARCHAR(255) DEFAULT 'text', 
+  content TEXT NOT NULL, 
+  createdAt DATETIME DEFAULT (datetime('now','localtime'))
+)`)
 
-  db.run(`CREATE TABLE messages (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-    toMobile VARCHAR(255) NOT NULL,
-    content TEXT NOT NULL,
-    createdAt DATETIME DEFAULT (datetime('now','localtime'))
-  )`)
-})
+db.exec(`CREATE TABLE messages (
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+  toMobile VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  createdAt DATETIME DEFAULT (datetime('now','localtime'))
+)`)
 
 db.close()
 

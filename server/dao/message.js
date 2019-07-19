@@ -1,10 +1,9 @@
-const Database = require('better-sqlite3')
-const db = new Database('db/default.sqlite3', { verbose: console.log })
+const db = require('./db')
 
-const getAllStatement = db.prepare('select * from messages order by createdAt desc limit ? offset ?')
-const getOneStatement = db.prepare('select * from messages where id = ?')
-const getTotalStatement = db.prepare('select count(*) as total from messages')
-const insertStatement = db.prepare('insert into messages(toMobile, content) values(@toMobile, @content)')
+const getAllStatement = db.prepare('SELECT * FROM messages ORDER BY createdAt DESC LIMIT ? OFFSET ?')
+const getOneStatement = db.prepare('SELECT * FROM messages WHERE id = ?')
+const getTotalStatement = db.prepare('SELECT count(*) AS total FROM messages')
+const insertStatement = db.prepare('INSERT INTO messages(toMobile, content) VALUES (@toMobile, @content)')
 
 function getAll (options) {
   const { from = 1, size = 10 } = options
