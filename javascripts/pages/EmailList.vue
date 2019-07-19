@@ -106,7 +106,7 @@ export default {
   created () {
     this.fetchEmails()
     // 因为使用了keep-alive，不需要removeEventListener之类的操作
-    websocket.addEventListener('EmailReceived', ({ data }) => {
+    websocket.addEventListener('NewEmail', ({ data }) => {
       const email = Object.assign({}, data)
       email.isNew = true
       this.emails.unshift(email)

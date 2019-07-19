@@ -1,34 +1,8 @@
 const DB = require('./db')
+const Database = require('better-sqlite3')
+const db = new Database('db/default.sqlite3', { verbose: console.log })
 
 function getListWithTotal (options, callback) {
-  const { from = 1, size = 10 } = options
-  let output = {}
-  let error = null
-  const db = DB.create()
-  db.serialize(() => {
-    const sql = `SELECT * FROM messages ORDER BY createdAt DESC LIMIT ? OFFSET ?`
-    db.all(sql, [size, from - 1], function(err, messages) {
-      if (err) {
-        error = err
-      } else {
-        output.messages = messages
-      }
-    })
-    db.get('SELECT count(*) as count FROM messages', function (err, { count }) {
-      if (err) {
-        error = err
-      } else {
-        output.total = count
-      }
-    })
-  })
-  db.close(() => {
-    if (error) {
-      callback && callback(error)
-    } else {
-      callback && callback(null, output.messages, output.total)
-    }
-  })
 }
 
 function getOne (id, callback) {

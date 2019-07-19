@@ -1,76 +1,32 @@
-const DB = require('./db')
+const Database = require('better-sqlite3')
+const db = new Database('db/default.sqlite3', { verbose: console.log })
 
-function getListWithTotal (options, callback) {
+const getAllStatement = db.prepare('select * from emails order by createdAt desc limit ? offset ?')
+const getOneStatement = db.prepare('select * from emails where id = ?')
+const getTotalStatement = db.prepare('select count(*) as total from emails')
+const insertStatement = db.prepare(`insert into emails(fromName, fromAddress, toName, toAddress, subject, type, content)
+  values(@fromName, @fromAddress, @toName, @toAddress, @subject, @type, @content)`)
+
+function getAll (options) {
   const { from = 1, size = 10 } = options
-  const output = {}
-  const db = DB.create()
-  db.serialize(() => {
-    const sql = `SELECT id, fromName, fromAddress, toName, toAddress, subject, type, content, createdAt 
-      FROM emails ORDER BY createdAt DESC LIMIT ? OFFSET ?`
-    db.all(sql, [size, from - 1], function(err, emails) {
-      if (err) {
-        output.error = err
-      } else {
-        output.emails = emails
-      }
-    })
-    db.get('SELECT count(*) as count FROM emails', function (err, { count }) {
-      if (err) {
-        output.error = err
-      } else {
-        output.total = count
-      }
-    })
-  })
-  db.close(() => {
-    if (output.error) {
-      callback && callback(output.error);
-    } else {
-      callback && callback(null, output.emails, output.total)
-    }
-  })
+  const emails = getAllStatement.all(size, from - 1)
+  const { total } = getTotalStatement.get()
+  return { emails, total }
 }
 
-function getOne (id, callback) {
-  DB.wrap(db => {
-    db.get('SELECT * from emails WHERE id = ?', id, function (err, email) {
-      if (err) {
-        callback(err)
-      } else {
-        callback(null, email)
-      }
-    })
-  })
+function getOne (id) {
+  const email = getOneStatement.get(id)
+  return email
 }
 
-function create (
-  {
-    fromName,
-    fromAddress,
-    toName,
-    toAddress,
-    subject,
-    type = 'text',
-    content
-  }, 
-  callback
-) {
-  DB.wrap(db => {
-    db.run('INSERT INTO emails(fromName, fromAddress, toName, toAddress, subject, type, content) VALUES (?, ?, ?, ?, ?, ?, ?)', 
-      [fromName, fromAddress, toName, toAddress, subject, type, content], 
-      function (err) {
-        if (err) {
-          callback && callback(err)
-        } else {
-          callback && callback(null, this.lastID)
-        }
-      }
-    )
-  })
+function create (params) {
+  const { lastInsertRowid } = insertStatement.run(params)
+  const email = getOneStatement.get(lastInsertRowid)
+  return email
 }
 
 module.exports = {
-  getListWithTotal,
+  getAll,
   getOne,
   create
 }
