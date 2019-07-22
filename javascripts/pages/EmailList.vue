@@ -1,5 +1,10 @@
 <template>
   <div>
+    <Form :label-width="80">
+      <FormItem label="发送者邮箱">
+        <Input v-model="filters.fromAddress"></Input>
+      </FormItem>
+    </Form>
     <Table :row-class-name="tableRowClassName" :columns="columns" :data="emails"
            @on-row-click="readRow">
       <template slot-scope="{ row }" slot="from">
@@ -30,14 +35,9 @@
 import axios from 'axios'
 import websocket from '@/websocket'
 import { toNamedContact } from '@/utils/emails'
-import { Table, Page } from 'iview'
 
 export default {
   name: 'EmailList',
-  components: {
-    Table,
-    Page
-  },
   data() { 
     return {
       columns: [
@@ -71,6 +71,9 @@ export default {
         }
       ],
       emails: [],
+      filters: {
+        fromAddress: undefined
+      },
       pageInfo: {
         number: 1,
         size: 10,
@@ -86,6 +89,15 @@ export default {
       }
     }
   },
+  watch: {
+    filters: {
+      deep: true,
+      handler () {
+        this.pageInfo.number = 1
+        this.fetchEmails()
+      }
+    }
+  },
   methods: {
     toNamedContact,
     pageNumberChanged (newPageNumber) {
@@ -93,7 +105,7 @@ export default {
       this.fetchEmails()
     },
     fetchEmails () {
-      axios.get('/emails', { params: this.pageParams })
+      axios.get('/emails', { params: { ...this.pageParams, ...this.filters } })
         .then(response => {
           const data = response.data
           this.emails = data.emails
