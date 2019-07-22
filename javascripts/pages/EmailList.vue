@@ -4,6 +4,9 @@
       <FormItem label="发送者邮箱">
         <Input v-model="filters.fromAddress"></Input>
       </FormItem>
+      <FormItem label="接受者邮箱">
+        <Input v-model="filters.toAddress"></Input>
+      </FormItem>
     </Form>
     <Table :row-class-name="tableRowClassName" :columns="columns" :data="emails"
            @on-row-click="readRow">
@@ -72,7 +75,8 @@ export default {
       ],
       emails: [],
       filters: {
-        fromAddress: undefined
+        fromAddress: undefined,
+        toAddress: undefined
       },
       pageInfo: {
         number: 1,

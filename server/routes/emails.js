@@ -6,8 +6,8 @@ const websocket = require('../websocket')
 router.get('/', function(req, res, next) {
   const from = parseInt(req.query.from || 1)
   const size = parseInt(req.query.size || 10)
-  const fromAddress = req.query.fromAddress
-  const { emails, total } = EmailDao.getAll({ from, size, fromAddress })
+  const { fromAddress, toAddress } = req.query
+  const { emails, total } = EmailDao.getAll({ from, size, fromAddress, toAddress })
   simplifyContent(emails)
   res.send({ emails, total })
 })

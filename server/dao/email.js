@@ -11,14 +11,9 @@ const getTagsStatement = db.prepare(`SELECT * FROM tags WHERE targetType = "Proj
 const insertTagStatement = db.prepare(`INSERT INTO tags(name, targetType, targetId)
   VALUES (@name, 'Project', @targetId)`)
 
-const getAll = db.transaction(({ from = 1, size = 10, fromAddress }) => {
-  let whereClause = null
-  if (fromAddress) {
-    whereClause = 'WHERE fromAddress = @fromAddress'
-  } else {
-    whereClause = ''
-  }
-  const emails = getAllStatement(whereClause).all({ fromAddress, limit: size, offset: from - 1 })
+const getAll = db.transaction(({ from = 1, size = 10, ...filters }) => {
+  const whereClause = buildWhereClause(filters)
+  const emails = getAllStatement(whereClause).all({ ...filters, limit: size, offset: from - 1 })
   for (const email of emails) {
     email.tags = getTags(email.id)
   }
@@ -46,6 +41,17 @@ function insertTags (emailId, tags) {
   for (const tag of tags) {
     insertTagStatement.run({ name: tag, targetId: emailId })
   }
+}
+
+function buildWhereClause (filters) {
+  const whereConditions = []
+  if (filters.fromAddress) {
+    whereConditions.push('fromAddress = @fromAddress')
+  }
+  if (filters.toAddress) {
+    whereConditions.push('toAddress = @toAddress')
+  }
+  return whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : ''
 }
 
 module.exports = {
