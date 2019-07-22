@@ -1,11 +1,14 @@
 <template>
   <div>
-    <Form :label-width="80">
+    <Form :label-width="80" inline>
       <FormItem label="发送者邮箱">
         <Input v-model="filters.fromAddress"></Input>
       </FormItem>
       <FormItem label="接受者邮箱">
         <Input v-model="filters.toAddress"></Input>
+      </FormItem>
+      <FormItem label="标签">
+        <Input v-model="filters.tag"></Input>
       </FormItem>
     </Form>
     <Table :row-class-name="tableRowClassName" :columns="columns" :data="emails"
@@ -75,8 +78,9 @@ export default {
       ],
       emails: [],
       filters: {
-        fromAddress: undefined,
-        toAddress: undefined
+        fromAddress: '',
+        toAddress: '',
+        tag: ''
       },
       pageInfo: {
         number: 1,

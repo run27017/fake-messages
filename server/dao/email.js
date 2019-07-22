@@ -1,15 +1,28 @@
 const db = require('./db')
 
-const getAllStatement = whereClause =>
-  db.prepare(`SELECT * FROM emails ${whereClause} ORDER BY createdAt desc LIMIT @limit OFFSET @offset`)
+const getAllStatement = whereClause => db.prepare(`
+  SELECT emails.*
+  FROM emails
+  LEFT JOIN tags on tags.targetType = 'Email' AND tags.targetId = emails.id
+  ${whereClause}
+  GROUP BY emails.id
+  ORDER BY createdAt desc
+  LIMIT @limit OFFSET @offset
+`)
+const getTotalStatement = whereClause => db.prepare(`
+  SELECT count(*) as total
+  FROM emails
+  LEFT JOIN tags on tags.targetType = 'Email' AND tags.targetId = emails.id
+  ${whereClause}
+  GROUP BY emails.id
+`)
 const getOneStatement = db.prepare('SELECT * FROM emails WHERE id = ?')
-const getTotalStatement = db.prepare('SELECT count(*) AS total FROM emails')
 const insertStatement = db.prepare(`INSERT INTO emails(fromName, fromAddress, toName, toAddress, subject, type, content)
   VALUES (@fromName, @fromAddress, @toName, @toAddress, @subject, @type, @content)`)
 
-const getTagsStatement = db.prepare(`SELECT * FROM tags WHERE targetType = "Project" and targetId = ?`)
+const getTagsStatement = db.prepare(`SELECT * FROM tags WHERE targetType = "Email" and targetId = ?`)
 const insertTagStatement = db.prepare(`INSERT INTO tags(name, targetType, targetId)
-  VALUES (@name, 'Project', @targetId)`)
+  VALUES (@name, 'Email', @targetId)`)
 
 const getAll = db.transaction(({ from = 1, size = 10, ...filters }) => {
   const whereClause = buildWhereClause(filters)
@@ -17,7 +30,7 @@ const getAll = db.transaction(({ from = 1, size = 10, ...filters }) => {
   for (const email of emails) {
     email.tags = getTags(email.id)
   }
-  const { total } = getTotalStatement.get()
+  const { total } = getTotalStatement(whereClause).get(filters) || { total: 0 }
   return { emails, total }
 })
 
@@ -46,10 +59,13 @@ function insertTags (emailId, tags) {
 function buildWhereClause (filters) {
   const whereConditions = []
   if (filters.fromAddress) {
-    whereConditions.push('fromAddress = @fromAddress')
+    whereConditions.push('emails.fromAddress = @fromAddress')
   }
   if (filters.toAddress) {
-    whereConditions.push('toAddress = @toAddress')
+    whereConditions.push('emails.toAddress = @toAddress')
+  }
+  if (filters.tag) {
+    whereConditions.push('tags.name = @tag')
   }
   return whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : ''
 }

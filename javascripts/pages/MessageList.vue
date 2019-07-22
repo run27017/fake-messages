@@ -1,5 +1,13 @@
 <template>
   <div>
+    <Form :label-width="80" inline>
+      <FormItem label="接受者手机">
+        <Input v-model="filters.toMobile"></Input>
+      </FormItem>
+      <FormItem label="标签">
+        <Input v-model="filters.tag"></Input>
+      </FormItem>
+    </Form>
     <Table :row-class-name="tableRowClassName" :columns="columns" :data="messages"
            @on-row-click="readRow">
       <template slot-scope="{ row }" slot="createdAt">
@@ -46,6 +54,10 @@ export default {
         }
       ],
       messages: [],
+      filters: {
+        toMobile: '',
+        tag: ''
+      },
       pageInfo: {
         number: 1,
         size: 10,
@@ -61,13 +73,22 @@ export default {
       }
     }
   },
+  watch: {
+    filters: {
+      deep: true,
+      handler () {
+        this.pageInfo.number = 1
+        this.fetchMessages()
+      }
+    }
+  },
   methods: {
     pageNumberChanged (newPageNumber) {
       this.pageInfo.number = newPageNumber
       this.fetchMessages()
     },
     fetchMessages () {
-      axios.get('/messages', { params: this.pageParams })
+      axios.get('/messages', { params: { ...this.filters, ...this.pageParams } })
         .then(response => {
           const data = response.data
           this.messages = data.messages

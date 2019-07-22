@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const express = require('express')
 const router = express.Router()
 const MessageDao = require('../dao/message')
@@ -6,7 +7,8 @@ const websocket = require('../websocket')
 router.get('/', function(req, res, next) {
   const from = parseInt(req.query.from || 1)
   const size = parseInt(req.query.size || 10)
-  const { messages, total } = MessageDao.getAll({ from, size })
+  const filters = _.pick(req.query, ['toMobile', 'tag'])
+  const { messages, total } = MessageDao.getAll({ from, size, ...filters })
   res.send({ messages, total })
 })
 

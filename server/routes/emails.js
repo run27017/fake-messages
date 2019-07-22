@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const express = require('express')
 const router = express.Router()
 const EmailDao = require('../dao/email')
@@ -6,8 +7,8 @@ const websocket = require('../websocket')
 router.get('/', function(req, res, next) {
   const from = parseInt(req.query.from || 1)
   const size = parseInt(req.query.size || 10)
-  const { fromAddress, toAddress } = req.query
-  const { emails, total } = EmailDao.getAll({ from, size, fromAddress, toAddress })
+  const filters = _.pick(req.query, ['fromAddress', 'toAddress', 'tag'])
+  const { emails, total } = EmailDao.getAll({ from, size, ...filters })
   simplifyContent(emails)
   res.send({ emails, total })
 })
