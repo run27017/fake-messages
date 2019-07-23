@@ -13,8 +13,8 @@
               <Icon type="ios-chatbubbles"></Icon>
               短信
             </MenuItem>
-            <MenuItem name="help" :to="{ name: 'help' }" class="secondary-menu">
-              开发者帮助
+            <MenuItem name="docs" :to="{ name: 'docs' }" class="secondary-menu">
+              开发者文档
             </MenuItem>
           </div>
         </Menu>

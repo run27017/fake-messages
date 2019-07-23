@@ -36,6 +36,10 @@ module.exports = {
         ]
       },
       {
+        test: /\.ya?ml/,
+        loader: 'js-yaml-loader'
+      },
+      {
         test: /\.md$/,
         loader: 'vue-loader!vue-md-loader'
       },
