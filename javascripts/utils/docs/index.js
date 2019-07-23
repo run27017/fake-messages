@@ -1,13 +1,8 @@
-import spec from './swagger.yaml'
+import spec from './openapi.yaml'
 
-const host = window.location.host
-const scheme = (() => {
-  const protocol = window.location.protocol
-  return protocol.substr(0, protocol.length - 1)
-})()
-
-spec.host = host
-spec.schemes = [scheme]
+spec.servers = [
+  { url: window.location.origin }
+]
 
 export default spec 
 

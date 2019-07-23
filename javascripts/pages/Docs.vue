@@ -15,7 +15,8 @@ export default {
       domNode: this.$refs.swagger,
       spec: docs,
       defaultModelExpandDepth: 3,
-      displayRequestDuration: true
+      displayRequestDuration: true,
+      docExpansion: 'list'
     })
   }
 }
