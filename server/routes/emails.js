@@ -2,6 +2,7 @@ const _ = require('lodash')
 const express = require('express')
 const router = express.Router()
 const EmailDao = require('../dao/email')
+const TagDao = require('../dao/tag')
 const websocket = require('../websocket')
 
 router.get('/', function(req, res, next) {
@@ -13,6 +14,12 @@ router.get('/', function(req, res, next) {
   res.send({ emails, total })
 })
 
+router.get('/tags', function (req, res, next) {
+  const tags = TagDao.getAll({ type: 'Email' }).map(tag => tag.name)
+  res.send({ tags })
+})
+
+// TODO: 限制id为纯数字
 router.get('/:id', function(req, res, next) {
   const { id } = req.params
   const email = EmailDao.getOne(id)

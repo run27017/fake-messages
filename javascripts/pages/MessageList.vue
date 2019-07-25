@@ -5,7 +5,9 @@
         <Input v-model="filters.toMobile"></Input>
       </FormItem>
       <FormItem label="标签">
-        <Input v-model="filters.tag"></Input>
+        <Select v-model="filters.tag" clearable style="width:200px">
+          <Option v-for="tag in options.tags" :value="tag" :key="tag">{{ tag }}</Option>
+        </Select>
       </FormItem>
     </Form>
     <Table :row-class-name="tableRowClassName" :columns="columns" :data="messages"
@@ -62,6 +64,9 @@ export default {
         number: 1,
         size: 10,
         total: 0
+      },
+      options: {
+        tags: []
       }
     }
   },
@@ -98,6 +103,15 @@ export default {
           console.log('error', arguments);
         })
     },
+    fetchOptions () {
+      axios.get('/messages/tags')
+        .then(({ data: { tags }}) => {
+          this.options.tags = tags
+        })
+        .catch(function () {
+          console.log('error', arguments);
+        })
+    },
     tableRowClassName (row, index) {
       return row.isNew ? 'new-item' : ''
     },
@@ -116,6 +130,7 @@ export default {
   },
   created () {
     this.fetchMessages()
+    this.fetchOptions()
     // 因为使用了keep-alive，不需要removeEventListener之类的操作
     websocket.addEventListener('NewMessage', ({ data: message }) => {
       if (this.isMatchFilters(message)) {
