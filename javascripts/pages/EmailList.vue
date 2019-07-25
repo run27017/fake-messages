@@ -128,15 +128,28 @@ export default {
     },
     readRow (_, index) {
       this.emails[index].isNew = false
+    },
+    isMatchFilters (email) {
+      if (this.filters.fromAddress && email.fromAddress !== this.filters.fromAddress) {
+        return false
+      }
+      if (this.filters.toAddress && email.toAddress !== this.filters.toAddress) {
+        return false
+      }
+      if (this.filters.tag && email.tags.indexOf(this.filters.tag) === -1) {
+        return false
+      }
+      return true
     }
   },
   created () {
     this.fetchEmails()
     // 因为使用了keep-alive，不需要removeEventListener之类的操作
-    websocket.addEventListener('NewEmail', ({ data }) => {
-      const email = Object.assign({}, data)
-      email.isNew = true
-      this.emails.unshift(email)
+    websocket.addEventListener('NewEmail', ({ data: email }) => {
+      if (this.isMatchFilters(email)) {
+        email.isNew = true
+        this.emails.unshift(email)
+      }
     })
   }
 }

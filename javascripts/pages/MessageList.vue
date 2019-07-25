@@ -103,15 +103,25 @@ export default {
     },
     readRow (_, index) {
       this.messages[index].isNew = false
+    },
+    isMatchFilters (email) {
+      if (this.filters.toMobile && email.toMobile !== this.filters.toMobile) {
+        return false
+      }
+      if (this.filters.tag && email.tags.indexOf(this.filters.tag) === -1) {
+        return false
+      }
+      return true
     }
   },
   created () {
     this.fetchMessages()
     // 因为使用了keep-alive，不需要removeEventListener之类的操作
-    websocket.addEventListener('NewMessage', ({ data }) => {
-      const message = Object.assign({}, data)
-      message.isNew = true
-      this.messages.unshift(message)
+    websocket.addEventListener('NewMessage', ({ data: message }) => {
+      if (this.isMatchFilters(message)) {
+        message.isNew = true
+        this.messages.unshift(message)
+      }
     })
   }
 }
