@@ -1,11 +1,15 @@
 <template>
   <div>
     <Form :label-width="80" inline>
-      <FormItem label="发送者邮箱">
-        <Input v-model="filters.fromAddress"></Input>
+      <FormItem label="收件人">
+        <AutoComplete v-model="filters.toAddress"
+                      :data="options.toAddresses"
+                      @on-change="fetchToAddresses" />
       </FormItem>
-      <FormItem label="接受者邮箱">
-        <Input v-model="filters.toAddress"></Input>
+      <FormItem label="发件人">
+        <AutoComplete v-model="filters.fromAddress"
+                      :data="options.fromAddresses"
+                      @on-change="fetchFromAddresses" />
       </FormItem>
       <FormItem label="标签">
         <Select v-model="filters.tag" clearable style="width:200px">
@@ -50,12 +54,12 @@ export default {
     return {
       columns: [
         {
-          title: '发件人',
-          slot: 'from'
-        },
-        {
           title: '收件人',
           slot: 'to'
+        },
+        {
+          title: '发件人',
+          slot: 'from'
         },
         {
           title: '标签',
@@ -90,7 +94,9 @@ export default {
         total: 0
       },
       options: {
-        tags: []
+        tags: [],
+        toAddresses: [],
+        fromAddresses: []
       }
     }
   },
@@ -128,7 +134,25 @@ export default {
           console.log('error', arguments);
         })
     },
-    fetchOptions () {
+    fetchToAddresses (filter = '') {
+      axios.get('/emails/toAddresses', { params: { filter } })
+        .then(({ data: { toAddresses }}) => {
+          this.options.toAddresses = toAddresses
+        })
+        .catch(function () {
+          console.log('error', arguments);
+        })
+    },
+    fetchFromAddresses (filter = '') {
+      axios.get('/emails/fromAddresses', { params: { filter } })
+        .then(({ data: { fromAddresses }}) => {
+          this.options.fromAddresses = fromAddresses
+        })
+        .catch(function () {
+          console.log('error', arguments);
+        })
+    },
+    fetchTags () {
       axios.get('/emails/tags')
         .then(({ data: { tags }}) => {
           this.options.tags = tags
@@ -158,7 +182,10 @@ export default {
   },
   created () {
     this.fetchEmails()
-    this.fetchOptions()
+    this.fetchToAddresses()
+    this.fetchFromAddresses()
+    this.fetchTags()
+
     // 因为使用了keep-alive，不需要removeEventListener之类的操作
     websocket.addEventListener('NewEmail', ({ data: email }) => {
       if (this.isMatchFilters(email)) {

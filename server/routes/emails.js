@@ -14,8 +14,20 @@ router.get('/', function(req, res, next) {
   res.send({ emails, total })
 })
 
+router.get('/fromAddresses', function (req, res, next) {
+  const { filter } = req.query
+  const fromAddresses = EmailDao.getFromAddresses({ filter })
+  res.send({ fromAddresses })
+})
+
+router.get('/toAddresses', function (req, res, next) {
+  const { filter } = req.query
+  const toAddresses = EmailDao.getToAddresses({ filter })
+  res.send({ toAddresses })
+})
+
 router.get('/tags', function (req, res, next) {
-  const tags = TagDao.getAll({ type: 'Email' }).map(tag => tag.name)
+  const tags = TagDao.getAll({ type: 'Email' })
   res.send({ tags })
 })
 

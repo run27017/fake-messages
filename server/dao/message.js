@@ -19,6 +19,15 @@ const getTotalStatement = whereClause => db.prepare(`
 const getOneStatement = db.prepare('SELECT * FROM messages WHERE id = ?')
 const insertStatement = db.prepare('INSERT INTO messages(toMobile, content) VALUES (@toMobile, @content)')
 
+const getToMobilesStatement = db.prepare(`
+  SELECT toMobile
+  from messages
+  WHERE toMobile LIKE @filter
+  GROUP BY toMobile
+  ORDER BY createdAt desc
+  LIMIT @limit
+`)
+
 const getTagsStatement = db.prepare(`SELECT * FROM tags WHERE targetType = "Message" and targetId = ?`)
 const insertTagStatement = db.prepare(`INSERT INTO tags(name, targetType, targetId)
   VALUES (@name, 'Message', @targetId)`)
@@ -41,6 +50,10 @@ const create = ({ tags = [], ...params }) => {
   const { lastInsertRowid: messageId } = insertStatement.run(params)
   insertTags(messageId, tags)
   return getOne(messageId)
+}
+
+const getToMobiles = ({ filter }) => {
+  return getToMobilesStatement.all({ filter: `%${filter}%`, limit: 10 }).map(row => row.toMobile)
 }
 
 function getTags (messageId) {
@@ -66,6 +79,7 @@ function buildWhereClause (filters) {
 
 module.exports = {
   getAll,
-  create
+  create,
+  getToMobiles
 }
 

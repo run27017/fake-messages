@@ -13,8 +13,14 @@ router.get('/', function(req, res, next) {
   res.send({ messages, total })
 })
 
+router.get('/toMobiles', function (req, res, next) {
+  const { filter } = req.query
+  const toMobiles = MessageDao.getToMobiles({ filter })
+  res.send({ toMobiles })
+})
+
 router.get('/tags', function (req, res, next) {
-  const tags = TagDao.getAll({ type: 'Message' }).map(tag => tag.name)
+  const tags = TagDao.getAll({ type: 'Message' })
   res.send({ tags })
 })
 

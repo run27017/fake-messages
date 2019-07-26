@@ -20,6 +20,23 @@ const getOneStatement = db.prepare('SELECT * FROM emails WHERE id = ?')
 const insertStatement = db.prepare(`INSERT INTO emails(fromName, fromAddress, toName, toAddress, subject, type, content)
   VALUES (@fromName, @fromAddress, @toName, @toAddress, @subject, @type, @content)`)
 
+const getFromAddressesStatement = db.prepare(`
+  SELECT fromAddress
+  from emails
+  WHERE fromAddress LIKE @filter
+  GROUP BY fromAddress
+  ORDER BY createdAt desc
+  LIMIT @limit
+`)
+const getToAddressesStatement = db.prepare(`
+  SELECT toAddress
+  from emails
+  WHERE toAddress LIKE @filter
+  GROUP BY toAddress
+  ORDER BY createdAt desc
+  LIMIT @limit
+`)
+
 const getTagsStatement = db.prepare(`SELECT * FROM tags WHERE targetType = "Email" and targetId = ?`)
 const insertTagStatement = db.prepare(`INSERT INTO tags(name, targetType, targetId)
   VALUES (@name, 'Email', @targetId)`)
@@ -45,6 +62,14 @@ const create = db.transaction(({ tags = [], ...params }) => {
   insertTags(emailId, tags)
   return getOne(emailId)
 })
+
+const getFromAddresses = ({ filter }) => {
+  return getFromAddressesStatement.all({ filter: `%${filter}%`, limit: 10 }).map(row => row.fromAddress)
+}
+
+const getToAddresses = ({ filter }) => {
+  return getToAddressesStatement.all({ filter: `%${filter}%`, limit: 10 }).map(row => row.toAddress)
+}
 
 function getTags (emailId) {
   return getTagsStatement.all(emailId).map(tag => tag.name)
@@ -73,6 +98,8 @@ function buildWhereClause (filters) {
 module.exports = {
   getAll,
   getOne,
-  create
+  create,
+  getToAddresses,
+  getFromAddresses
 }
 

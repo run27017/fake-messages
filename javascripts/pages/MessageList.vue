@@ -1,8 +1,10 @@
 <template>
   <div>
     <Form :label-width="80" inline>
-      <FormItem label="接受者手机">
-        <Input v-model="filters.toMobile"></Input>
+      <FormItem label="接收手机">
+        <AutoComplete v-model="filters.toMobile"
+                      :data="options.toMobiles"
+                      @on-change="fetchToMobiles" />
       </FormItem>
       <FormItem label="标签">
         <Select v-model="filters.tag" clearable style="width:200px">
@@ -66,7 +68,8 @@ export default {
         total: 0
       },
       options: {
-        tags: []
+        tags: [],
+        toMobiles: []
       }
     }
   },
@@ -103,7 +106,16 @@ export default {
           console.log('error', arguments);
         })
     },
-    fetchOptions () {
+    fetchToMobiles (filter = '') {
+      axios.get('/messages/toMobiles', { params: { filter } })
+        .then(({ data: { toMobiles }}) => {
+          this.options.toMobiles = toMobiles
+        })
+        .catch(function () {
+          console.log('error', arguments);
+        })
+    },
+    fetchTags () {
       axios.get('/messages/tags')
         .then(({ data: { tags }}) => {
           this.options.tags = tags
@@ -130,7 +142,9 @@ export default {
   },
   created () {
     this.fetchMessages()
-    this.fetchOptions()
+    this.fetchToMobiles()
+    this.fetchTags()
+
     // 因为使用了keep-alive，不需要removeEventListener之类的操作
     websocket.addEventListener('NewMessage', ({ data: message }) => {
       if (this.isMatchFilters(message)) {
