@@ -1,9 +1,11 @@
 const _ = require('lodash')
 const express = require('express')
-const router = express.Router()
+const { body, validationResult } = require('express-validator')
 const MessageDao = require('../dao/message')
 const TagDao = require('../dao/tag')
 const websocket = require('../websocket')
+
+const router = express.Router()
 
 router.get('/', function(req, res, next) {
   const from = parseInt(req.query.from || 1)
@@ -24,7 +26,16 @@ router.get('/tags', function (req, res, next) {
   res.send({ tags })
 })
 
-router.post('/', function(req, res, next) {
+router.post('/', [
+  body('message.toMobile').not().isEmpty(),
+  body('message.content').not().isEmpty(),
+  body('message.tags').isArray()
+], function(req, res, next) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
   const messageParams = req.body.message
   const message = MessageDao.create(messageParams)
   res.status(201).send({ message })

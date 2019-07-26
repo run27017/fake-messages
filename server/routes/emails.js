@@ -1,9 +1,11 @@
 const _ = require('lodash')
 const express = require('express')
-const router = express.Router()
+const { body, validationResult } = require('express-validator')
 const EmailDao = require('../dao/email')
 const TagDao = require('../dao/tag')
 const websocket = require('../websocket')
+
+const router = express.Router()
 
 router.get('/', function(req, res, next) {
   const from = parseInt(req.query.from || 1)
@@ -38,7 +40,18 @@ router.get('/:id', function(req, res, next) {
   res.send({ email })
 })
 
-router.post('/', function(req, res, next) {
+router.post('/', [
+  body('email.toAddress').not().isEmpty(),
+  body('email.fromAddress').not().isEmpty(),
+  body('email.subject').not().isEmpty(),
+  body('email.content').not().isEmpty(),
+  body('email.tags').isArray()
+], function(req, res, next) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
   const emailParams = req.body.email
   const email = EmailDao.create(emailParams)
   res.status(201).send({ email })
