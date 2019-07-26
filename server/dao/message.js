@@ -10,11 +10,10 @@ const getAllStatement = whereClause => db.prepare(`
   LIMIT @limit OFFSET @offset
 `)
 const getTotalStatement = whereClause => db.prepare(`
-  SELECT count(*) as total
+  SELECT count(distinct(messages.id)) as total
   FROM messages
   LEFT JOIN tags on tags.targetType = 'Message' AND tags.targetId = messages.id
   ${whereClause}
-  GROUP BY messages.id
 `)
 const getOneStatement = db.prepare('SELECT * FROM messages WHERE id = ?')
 const insertStatement = db.prepare('INSERT INTO messages(toMobile, content) VALUES (@toMobile, @content)')

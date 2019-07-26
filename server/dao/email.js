@@ -10,11 +10,10 @@ const getAllStatement = whereClause => db.prepare(`
   LIMIT @limit OFFSET @offset
 `)
 const getTotalStatement = whereClause => db.prepare(`
-  SELECT count(*) as total
+  SELECT count(distinct(emails.id)) as total
   FROM emails
   LEFT JOIN tags on tags.targetType = 'Email' AND tags.targetId = emails.id
   ${whereClause}
-  GROUP BY emails.id
 `)
 const getOneStatement = db.prepare('SELECT * FROM emails WHERE id = ?')
 const insertStatement = db.prepare(`INSERT INTO emails(fromName, fromAddress, toName, toAddress, subject, type, content)
