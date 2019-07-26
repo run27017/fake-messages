@@ -27,21 +27,22 @@ const getToMobilesStatement = db.prepare(`
   LIMIT @limit
 `)
 
-const getTagsStatement = db.prepare(`SELECT * FROM tags WHERE targetType = "Message" and targetId = ?`)
+const getAllTagsStatement = db.prepare(`SELECT distinct(name) from tags WHERE targetType = 'Message'`)
+const getTagsOfMessageStatement = db.prepare(`SELECT * FROM tags WHERE targetType = "Message" and targetId = ?`)
 const insertTagStatement = db.prepare(`INSERT INTO tags(name, targetType, targetId)
   VALUES (@name, 'Message', @targetId)`)
 
 const getAll = db.transaction(({ from = 1, size = 10, ...filters }) => {
   const whereClause = buildWhereClause(filters)
   const messages = getAllStatement(whereClause).all({ ...filters, limit: size, offset: from - 1 })
-  messages.forEach(message => message.tags = getTags(message.id))
+  messages.forEach(message => message.tags = getTagsOfMessage(message.id))
   const { total } = getTotalStatement(whereClause).get(filters) || { total: 0 }
   return { messages, total }
 })
 
 const getOne = id => {
   const message = getOneStatement.get(id)
-  message.tags = getTags(id)
+  message.tags = getTagsOfMessage(id)
   return message
 }
 
@@ -55,8 +56,12 @@ const getToMobiles = ({ filter }) => {
   return getToMobilesStatement.all({ filter: `%${filter}%`, limit: 10 }).map(row => row.toMobile)
 }
 
-function getTags (messageId) {
-  return getTagsStatement.all(messageId).map(tag => tag.name)
+const getTags = () => {
+  return getAllTagsStatement.all().map(row => row.name)
+}
+
+function getTagsOfMessage (messageId) {
+  return getTagsOfMessageStatement.all(messageId).map(tag => tag.name)
 }
 
 function insertTags (messageId, tags) {
@@ -79,6 +84,7 @@ function buildWhereClause (filters) {
 module.exports = {
   getAll,
   create,
-  getToMobiles
+  getToMobiles,
+  getTags
 }
 

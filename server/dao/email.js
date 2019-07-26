@@ -36,15 +36,16 @@ const getToAddressesStatement = db.prepare(`
   LIMIT @limit
 `)
 
-const getTagsStatement = db.prepare(`SELECT * FROM tags WHERE targetType = "Email" and targetId = ?`)
-const insertTagStatement = db.prepare(`INSERT INTO tags(name, targetType, targetId)
+const getAllTagsStatement = db.prepare(`SELECT distinct(name) from tags WHERE targetType = 'Email'`)
+const getTagsOfEmailStatement = db.prepare(`SELECT * FROM tags WHERE targetType = "Email" and targetId = ?`)
+const insertTagsStatement = db.prepare(`INSERT INTO tags(name, targetType, targetId)
   VALUES (@name, 'Email', @targetId)`)
 
 const getAll = db.transaction(({ from = 1, size = 10, ...filters }) => {
   const whereClause = buildWhereClause(filters)
   const emails = getAllStatement(whereClause).all({ ...filters, limit: size, offset: from - 1 })
   for (const email of emails) {
-    email.tags = getTags(email.id)
+    email.tags = getTagsOfEmail(email.id)
   }
   const { total } = getTotalStatement(whereClause).get(filters) || { total: 0 }
   return { emails, total }
@@ -52,7 +53,7 @@ const getAll = db.transaction(({ from = 1, size = 10, ...filters }) => {
 
 const getOne = db.transaction(id => {
   const email = getOneStatement.get(id)
-  email.tags = getTags(id)
+  email.tags = getTagsOfEmail(id)
   return email
 })
 
@@ -70,13 +71,17 @@ const getToAddresses = ({ filter }) => {
   return getToAddressesStatement.all({ filter: `%${filter}%`, limit: 10 }).map(row => row.toAddress)
 }
 
-function getTags (emailId) {
-  return getTagsStatement.all(emailId).map(tag => tag.name)
+const getTags = () => {
+  return getAllTagsStatement.all().map(row => row.name)
+}
+
+function getTagsOfEmail (emailId) {
+  return getTagsOfEmailStatement.all(emailId).map(tag => tag.name)
 }
 
 function insertTags (emailId, tags) {
   for (const tag of tags) {
-    insertTagStatement.run({ name: tag, targetId: emailId })
+    insertTagsStatement.run({ name: tag, targetId: emailId })
   }
 }
 
@@ -99,6 +104,7 @@ module.exports = {
   getOne,
   create,
   getToAddresses,
-  getFromAddresses
+  getFromAddresses,
+  getTags
 }
 

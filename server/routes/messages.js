@@ -2,7 +2,6 @@ const _ = require('lodash')
 const express = require('express')
 const { body, validationResult } = require('express-validator')
 const MessageDao = require('../dao/message')
-const TagDao = require('../dao/tag')
 const websocket = require('../websocket')
 
 const router = express.Router()
@@ -22,7 +21,7 @@ router.get('/toMobiles', function (req, res, next) {
 })
 
 router.get('/tags', function (req, res, next) {
-  const tags = TagDao.getAll({ type: 'Message' })
+  const tags = MessageDao.getTags()
   res.send({ tags })
 })
 

@@ -2,7 +2,6 @@ const _ = require('lodash')
 const express = require('express')
 const { body, validationResult } = require('express-validator')
 const EmailDao = require('../dao/email')
-const TagDao = require('../dao/tag')
 const websocket = require('../websocket')
 
 const router = express.Router()
@@ -29,7 +28,7 @@ router.get('/toAddresses', function (req, res, next) {
 })
 
 router.get('/tags', function (req, res, next) {
-  const tags = TagDao.getAll({ type: 'Email' })
+  const tags = EmailDao.getTags()
   res.send({ tags })
 })
 
