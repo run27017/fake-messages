@@ -1,7 +1,6 @@
 {
   "name": "fake-messages",
-  "version": "0.0.0",
-  "private": true,
+  "version": "1.0.0",
   "scripts": {
     "build:js": "webpack",
     "watch:js": "webpack -w",
