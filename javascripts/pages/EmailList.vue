@@ -36,7 +36,9 @@
         </a>
       </template>
       <template slot-scope="{ row }" slot="tags">
-        {{ row.tags.join(', ') }}
+        <Tag v-for="tag in row.tags" :key="tag" @click.native="filters.tag = tag">
+          {{ tag }}
+        </Tag>
       </template>
       <template slot-scope="{ row }" slot="content">
         {{ row.content | plain(row.type) }}
