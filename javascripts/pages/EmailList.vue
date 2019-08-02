@@ -20,10 +20,14 @@
     <Table :row-class-name="tableRowClassName" :columns="columns" :data="emails"
            @on-row-click="readRow">
       <template slot-scope="{ row }" slot="from">
-        {{ toNamedContact(row.fromAddress, row.fromName) }}
+        <a @click="filters.fromAddress = row.fromAddress">
+          {{ toNamedContact(row.fromAddress, row.fromName) }}
+        </a>
       </template>
       <template slot-scope="{ row }" slot="to">
-        {{ toNamedContact(row.toAddress, row.toName) }}
+        <a @click="filters.toAddress = row.toAddress">
+          {{ toNamedContact(row.toAddress, row.toName) }}
+        </a>
       </template>
       <template slot-scope="{ row }" slot="tags">
         {{ row.tags.join(', ') }}

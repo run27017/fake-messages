@@ -14,11 +14,16 @@
     </Form>
     <Table :row-class-name="tableRowClassName" :columns="columns" :data="messages"
            @on-row-click="readRow">
-      <template slot-scope="{ row }" slot="createdAt">
-        {{ row.createdAt | datetime }}
+      <template slot-scope="{ row }" slot="toMobile">
+        <a @click="filters.toMobile = row.toMobile">
+          {{ row.toMobile }}
+        </a>
       </template>
       <template slot-scope="{ row }" slot="tags">
         {{ row.tags.join(', ') }}
+      </template>
+      <template slot-scope="{ row }" slot="createdAt">
+        {{ row.createdAt | datetime }}
       </template>
     </Table>
     <br>
@@ -42,7 +47,7 @@ export default {
       columns: [
         {
           title: '接收手机',
-          key: 'toMobile'
+          slot: 'toMobile'
         },
         {
           title: '标签',

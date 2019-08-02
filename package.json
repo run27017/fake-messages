@@ -2,7 +2,7 @@
   "name": "fake-messages",
   "version": "1.0.0",
   "scripts": {
-    "build:js": "webpack",
+    "build:js": "webpack --mode production",
     "watch:js": "webpack -w",
     "start": "node ./bin/www",
     "server:dev": "cross-env DEBUG=fake-messages:* nodemon node ./bin/www",
