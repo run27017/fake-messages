@@ -10,8 +10,7 @@
   },
   "nodemonConfig": {
     "watch": [
-      "server",
-      "db/default.sqlite3"
+      "server"
     ]
   },
   "dependencies": {

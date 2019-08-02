@@ -96,6 +96,12 @@ function buildWhereClause (filters) {
   if (filters.tag) {
     whereConditions.push('tags.name = @tag')
   }
+  if (filters.createdAtFrom) {
+    whereConditions.push('createdAt >= @createdAtFrom')
+  }
+  if (filters.createdAtTo) {
+    whereConditions.push('createdAt <= @createdAtTo')
+  }
   return whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : ''
 }
 

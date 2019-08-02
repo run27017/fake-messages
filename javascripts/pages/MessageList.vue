@@ -11,6 +11,12 @@
           <Option v-for="tag in options.tags" :value="tag" :key="tag">{{ tag }}</Option>
         </Select>
       </FormItem>
+      <FormItem label="起始时间">
+        <DatePicker v-model="filters.createdAtFrom" type="datetime" placeholder="选择最小时间" style="width: 200px" />
+      </FormItem>
+      <FormItem label="截止时间">
+        <DatePicker v-model="filters.createdAtTo" type="datetime" placeholder="选择最大时间" style="width: 200px" />
+      </FormItem>
     </Form>
     <Table :row-class-name="tableRowClassName" :columns="columns" :data="messages"
            @on-row-click="readRow">
@@ -65,7 +71,9 @@ export default {
       messages: [],
       filters: {
         toMobile: '',
-        tag: ''
+        tag: '',
+        createdAtFrom: undefined,
+        createdAtTo: undefined
       },
       pageInfo: {
         number: 1,
@@ -135,11 +143,17 @@ export default {
     readRow (_, index) {
       this.messages[index].isNew = false
     },
-    isMatchFilters (email) {
-      if (this.filters.toMobile && email.toMobile !== this.filters.toMobile) {
+    isMatchFilters (message) {
+      if (this.filters.toMobile && message.toMobile !== this.filters.toMobile) {
         return false
       }
-      if (this.filters.tag && email.tags.indexOf(this.filters.tag) === -1) {
+      if (this.filters.tag && message.tags.indexOf(this.filters.tag) === -1) {
+        return false
+      }
+      if (this.filters.createdAtFrom && new Date(message.createdAt) < this.filters.createdAtFrom) {
+        return false
+      }
+      if (this.filters.createdAtTo && new Date(message.createdAt) > this.filters.createdAtTo) {
         return false
       }
       return true

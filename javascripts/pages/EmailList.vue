@@ -16,6 +16,12 @@
           <Option v-for="tag in options.tags" :value="tag" :key="tag">{{ tag }}</Option>
         </Select>
       </FormItem>
+      <FormItem label="起始时间">
+        <DatePicker v-model="filters.createdAtFrom" type="datetime" placeholder="选择最小时间" style="width: 200px" />
+      </FormItem>
+      <FormItem label="截止时间">
+        <DatePicker v-model="filters.createdAtTo" type="datetime" placeholder="选择最大时间" style="width: 200px" />
+      </FormItem>
     </Form>
     <Table :row-class-name="tableRowClassName" :columns="columns" :data="emails"
            @on-row-click="readRow">
@@ -90,7 +96,9 @@ export default {
       filters: {
         fromAddress: '',
         toAddress: '',
-        tag: ''
+        tag: '',
+        createdAtFrom: undefined,
+        createdAtTo: undefined
       },
       pageInfo: {
         number: 1,
@@ -179,6 +187,12 @@ export default {
         return false
       }
       if (this.filters.tag && email.tags.indexOf(this.filters.tag) === -1) {
+        return false
+      }
+      if (this.filters.createdAtFrom && new Date(email.createdAt) < this.filters.createdAtFrom) {
+        return false
+      }
+      if (this.filters.createdAtTo && new Date(email.createdAt) > this.filters.createdAtTo) {
         return false
       }
       return true
