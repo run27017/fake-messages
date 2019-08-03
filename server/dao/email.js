@@ -1,19 +1,24 @@
 const db = require('./db')
 
-const getAllStatement = whereClause => db.prepare(`
+const getAllStatement = (whereClause = '', havingClause = '') => db.prepare(`
   SELECT emails.*
   FROM emails
   LEFT JOIN tags on tags.targetType = 'Email' AND tags.targetId = emails.id
   ${whereClause}
   GROUP BY emails.id
+  ${havingClause}
   ORDER BY createdAt desc
   LIMIT @limit OFFSET @offset
 `)
-const getTotalStatement = whereClause => db.prepare(`
-  SELECT count(distinct(emails.id)) as total
-  FROM emails
-  LEFT JOIN tags on tags.targetType = 'Email' AND tags.targetId = emails.id
-  ${whereClause}
+const getTotalStatement = (whereClause = '', havingClause = '') => db.prepare(`
+  SELECT count(*) as total from (
+    SELECT emails.id
+    FROM emails
+    LEFT JOIN tags on tags.targetType = 'Email' AND tags.targetId = emails.id
+    ${whereClause}
+    GROUP BY emails.id
+    ${havingClause}
+  )
 `)
 const getOneStatement = db.prepare('SELECT * FROM emails WHERE id = ?')
 const insertStatement = db.prepare(`INSERT INTO emails(fromName, fromAddress, toName, toAddress, subject, type, content)
@@ -43,13 +48,13 @@ const insertTagsStatement = db.prepare(`INSERT INTO tags(name, targetType, targe
 
 const getAll = db.transaction(({ from = 1, size = 10, ...filters }) => {
   const whereClause = buildWhereClause(filters)
-  const filterParams = buildFilterParams(filters)
-  console.log('filterParams', filterParams)
-  const emails = getAllStatement(whereClause).all({ ...filterParams, limit: size, offset: from - 1 })
+  const havingClause = buildHavingClause(filters)
+  const emails = getAllStatement(whereClause, havingClause).all({ ...filters, limit: size, offset: from - 1 })
+  const { total } = getTotalStatement(whereClause, havingClause).get(filters) || { total: 0 }
+  
   for (const email of emails) {
     email.tags = getTagsOfEmail(email.id)
   }
-  const { total } = getTotalStatement(whereClause).get(filterParams) || { total: 0 }
   return { emails, total }
 })
 
@@ -95,21 +100,24 @@ function buildWhereClause (filters) {
   if (filters.toAddress) {
     whereConditions.push('emails.toAddress = @toAddress')
   }
-  if (filters.tags) {
-    const tagsString = filters.tags.map(tag => `'${tag}'`).join(',')
-    whereConditions.push(`tags.name in (${tagsString})`)
-  }
   if (filters.createdAtFrom) {
     whereConditions.push('createdAt >= @createdAtFrom')
   }
   if (filters.createdAtTo) {
     whereConditions.push('createdAt <= @createdAtTo')
   }
+  if (filters.tags) {
+    const tagsString = filters.tags.map(tag => `'${tag}'`).join(',')
+    whereConditions.push(`tags.name in (${tagsString})`)
+  }
   return whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : ''
 }
 
-function buildFilterParams (filters) {
-  return filters
+function buildHavingClause (filters) {
+  if (filters.tags) {
+    return `HAVING count(tags.id) = ${filters.tags.length}`
+  }
+  return ''
 }
 
 module.exports = {

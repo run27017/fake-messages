@@ -1,19 +1,24 @@
 const db = require('./db')
 
-const getAllStatement = whereClause => db.prepare(`
+const getAllStatement = (whereClause = '', havingClause = '') => db.prepare(`
   SELECT messages.*
   FROM messages
   LEFT JOIN tags on tags.targetType = 'Message' AND tags.targetId = messages.id
   ${whereClause}
   GROUP BY messages.id
+  ${havingClause}
   ORDER BY createdAt desc
   LIMIT @limit OFFSET @offset
 `)
-const getTotalStatement = whereClause => db.prepare(`
-  SELECT count(distinct(messages.id)) as total
-  FROM messages
-  LEFT JOIN tags on tags.targetType = 'Message' AND tags.targetId = messages.id
-  ${whereClause}
+const getTotalStatement = (whereClause = '', havingClause = '') => db.prepare(`
+  SELECT count(*) as total from (
+    SELECT messages.id
+    FROM messages
+    LEFT JOIN tags on tags.targetType = 'Message' AND tags.targetId = messages.id
+    ${whereClause}
+    GROUP BY messages.id
+    ${havingClause}
+  )
 `)
 const getOneStatement = db.prepare('SELECT * FROM messages WHERE id = ?')
 const insertStatement = db.prepare('INSERT INTO messages(toMobile, content) VALUES (@toMobile, @content)')
@@ -34,9 +39,11 @@ const insertTagStatement = db.prepare(`INSERT INTO tags(name, targetType, target
 
 const getAll = db.transaction(({ from = 1, size = 10, ...filters }) => {
   const whereClause = buildWhereClause(filters)
-  const messages = getAllStatement(whereClause).all({ ...filters, limit: size, offset: from - 1 })
+  const havingClause = buildHavingClause(filters)
+  const messages = getAllStatement(whereClause, havingClause).all({ ...filters, limit: size, offset: from - 1 })
+  const { total } = getTotalStatement(whereClause, havingClause).get(filters) || { total: 0 }
+
   messages.forEach(message => message.tags = getTagsOfMessage(message.id))
-  const { total } = getTotalStatement(whereClause).get(filters) || { total: 0 }
   return { messages, total }
 })
 
@@ -86,6 +93,13 @@ function buildWhereClause (filters) {
     whereConditions.push('createdAt <= @createdAtTo')
   }
   return whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : ''
+}
+
+function buildHavingClause (filters) {
+  if (filters.tags) {
+    return `HAVING count(tags.id) = ${filters.tags.length}`
+  }
+  return ''
 }
 
 module.exports = {
