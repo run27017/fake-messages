@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const spawn = require('child_process').spawn
+const spawn = require('cross-spawn')
 
 spawn('yarn', ['server:dev'], {
   stdio: 'inherit'
