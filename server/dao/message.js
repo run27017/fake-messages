@@ -75,8 +75,9 @@ function buildWhereClause (filters) {
   if (filters.toMobile) {
     whereConditions.push('messages.toMobile = @toMobile')
   }
-  if (filters.tag) {
-    whereConditions.push('tags.name = @tag')
+  if (filters.tags) {
+    const tagsString = filters.tags.map(tag => `'${tag}'`).join(',')
+    whereConditions.push(`tags.name in (${tagsString})`)
   }
   if (filters.createdAtFrom) {
     whereConditions.push('createdAt >= @createdAtFrom')

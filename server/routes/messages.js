@@ -9,7 +9,7 @@ const router = express.Router()
 router.get('/', function(req, res, next) {
   const from = parseInt(req.query.from || 1)
   const size = parseInt(req.query.size || 10)
-  const filters = _.pick(req.query, ['toMobile', 'tag', 'createdAtFrom', 'createdAtTo'])
+  const filters = _.pick(req.query, ['toMobile', 'tags', 'createdAtFrom', 'createdAtTo'])
   const { messages, total } = MessageDao.getAll({ from, size, ...filters })
   res.send({ messages, total })
 })

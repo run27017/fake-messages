@@ -7,7 +7,7 @@
                       @on-change="fetchToMobiles" />
       </FormItem>
       <FormItem label="标签">
-        <Select v-model="filters.tag" clearable style="width:200px">
+        <Select v-model="filters.tags" multiple clearable style="width:200px">
           <Option v-for="tag in options.tags" :value="tag" :key="tag">{{ tag }}</Option>
         </Select>
       </FormItem>
@@ -26,7 +26,7 @@
         </a>
       </template>
       <template slot-scope="{ row }" slot="tags">
-        <Tag v-for="tag in row.tags" :key="tag" @click.native="filters.tag = tag">
+        <Tag v-for="tag in row.tags" :key="tag" @click.native="addTagFilter(tag)">
           {{ tag }}
         </Tag>
       </template>
@@ -73,7 +73,7 @@ export default {
       messages: [],
       filters: {
         toMobile: '',
-        tag: '',
+        tags: [],
         createdAtFrom: undefined,
         createdAtTo: undefined
       },
@@ -159,6 +159,11 @@ export default {
         return false
       }
       return true
+    },
+    addTagFilter (tag) {
+      if (this.filters.tags.indexOf(tag) === -1) {
+        this.filters.tags.push(tag)
+      }
     }
   },
   created () {

@@ -43,11 +43,13 @@ const insertTagsStatement = db.prepare(`INSERT INTO tags(name, targetType, targe
 
 const getAll = db.transaction(({ from = 1, size = 10, ...filters }) => {
   const whereClause = buildWhereClause(filters)
-  const emails = getAllStatement(whereClause).all({ ...filters, limit: size, offset: from - 1 })
+  const filterParams = buildFilterParams(filters)
+  console.log('filterParams', filterParams)
+  const emails = getAllStatement(whereClause).all({ ...filterParams, limit: size, offset: from - 1 })
   for (const email of emails) {
     email.tags = getTagsOfEmail(email.id)
   }
-  const { total } = getTotalStatement(whereClause).get(filters) || { total: 0 }
+  const { total } = getTotalStatement(whereClause).get(filterParams) || { total: 0 }
   return { emails, total }
 })
 
@@ -93,8 +95,9 @@ function buildWhereClause (filters) {
   if (filters.toAddress) {
     whereConditions.push('emails.toAddress = @toAddress')
   }
-  if (filters.tag) {
-    whereConditions.push('tags.name = @tag')
+  if (filters.tags) {
+    const tagsString = filters.tags.map(tag => `'${tag}'`).join(',')
+    whereConditions.push(`tags.name in (${tagsString})`)
   }
   if (filters.createdAtFrom) {
     whereConditions.push('createdAt >= @createdAtFrom')
@@ -103,6 +106,10 @@ function buildWhereClause (filters) {
     whereConditions.push('createdAt <= @createdAtTo')
   }
   return whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : ''
+}
+
+function buildFilterParams (filters) {
+  return filters
 }
 
 module.exports = {
