@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const db = require('./db')
 
 const getAllStatement = (whereClause = '', havingClause = '') => db.prepare(`
@@ -40,8 +41,9 @@ const insertTagStatement = db.prepare(`INSERT INTO tags(name, targetType, target
 const getAll = db.transaction(({ from = 1, size = 10, ...filters }) => {
   const whereClause = buildWhereClause(filters)
   const havingClause = buildHavingClause(filters)
-  const messages = getAllStatement(whereClause, havingClause).all({ ...filters, limit: size, offset: from - 1 })
-  const { total } = getTotalStatement(whereClause, havingClause).get(filters) || { total: 0 }
+  const filterParams = buildFilterParams(filters)
+  const messages = getAllStatement(whereClause, havingClause).all({ ...filterParams, limit: size, offset: from - 1 })
+  const { total } = getTotalStatement(whereClause, havingClause).get(filterParams) || { total: 0 }
 
   messages.forEach(message => message.tags = getTagsOfMessage(message.id))
   return { messages, total }
@@ -82,15 +84,15 @@ function buildWhereClause (filters) {
   if (filters.toMobile) {
     whereConditions.push('messages.toMobile = @toMobile')
   }
-  if (filters.tags) {
-    const tagsString = filters.tags.map(tag => `'${tag}'`).join(',')
-    whereConditions.push(`tags.name in (${tagsString})`)
-  }
   if (filters.createdAtFrom) {
     whereConditions.push('createdAt >= @createdAtFrom')
   }
   if (filters.createdAtTo) {
     whereConditions.push('createdAt <= @createdAtTo')
+  }
+  if (filters.tags) {
+    const tagParams = new Array(filters.tags.length).fill(0).map((_, index) => `@tag${index + 1}`)
+    whereConditions.push(`tags.name in (${tagParams.join(', ')})`)
   }
   return whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : ''
 }
@@ -100,6 +102,15 @@ function buildHavingClause (filters) {
     return `HAVING count(tags.id) = ${filters.tags.length}`
   }
   return ''
+}
+
+function buildFilterParams (filters) {
+  const filterParams = Object.assign({}, filters)
+  if (filters.tags) {
+    const tagParams = filters.tags.map((tag, index) => [`tag${index + 1}`, tag])
+    Object.assign(filterParams, _.fromPairs(tagParams))
+  }
+  return filterParams
 }
 
 module.exports = {
