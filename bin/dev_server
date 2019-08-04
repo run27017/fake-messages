@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 const spawn = require('cross-spawn')
 
-spawn('yarn', ['server:dev'], {
+spawn('yarn', ['dev:server'], {
   stdio: 'inherit'
 })
 
-spawn('yarn', ['watch:js'], {
+spawn('yarn', ['dev:client'], {
   stdio: 'inherit'
 })

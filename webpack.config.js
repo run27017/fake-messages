@@ -6,7 +6,7 @@ module.exports = {
   target: 'web',
   entry: [
     '@babel/polyfill',
-    './javascripts/main.js'
+    './client/main.js'
   ],
   output: {
     path: path.resolve(__dirname, 'public/javascripts'),
@@ -59,7 +59,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'javascripts')
+      '@': path.resolve(__dirname, 'client')
     },
     extensions: ['*', '.js', '.vue', '.json']
   },

@@ -70,7 +70,7 @@ yarn
 bin/create_db
 
 # 打包客户端 js 文件
-yarn run build:js
+yarn run build
 
 # 启动服务器
 PORT=3000 yarn start
@@ -102,7 +102,6 @@ yarn run dev
 其他的有用的开发环境下的命令列举如下：
 
 - `bin/create_seeds`: 创建一些种子数据。
-- `yarn run watch:js`: 分解命令，实时打包客户端 js 代码。
 
 ## 适配器模式
 
@@ -176,7 +175,7 @@ $email_sender.impl = Settings.EmailSender.Adapter.constantize.new
 目录结构：
 
 - /server：服务器的代码
-- /javascripts：客户端的源，它会被 WebPack 打包，生成到 /public 目录下
+- /client：客户端的源，它会被 WebPack 打包，生成到 /public 目录下
 - /public：静态文件的根目录，其中的 /public/app.js 是 WebPack 打包后的单页代码
 
 基础工具：
@@ -191,8 +190,7 @@ $email_sender.impl = Settings.EmailSender.Adapter.constantize.new
 
 前端：
 
-- WebPack：用于打包客户端 js 代码
-
+- Webpack：用于打包客户端 js 代码
 - Vue：前端框架
 - iView：前端 UI
 - Sass：CSS 预处理器

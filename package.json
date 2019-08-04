@@ -1,12 +1,13 @@
 {
   "name": "fake-messages",
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "license": "GPL-3.0-only",
   "scripts": {
-    "build:js": "webpack --mode production",
-    "watch:js": "webpack -w",
+    "build": "webpack --mode production",
     "start": "node ./bin/www",
-    "server:dev": "cross-env DEBUG=fake-messages:* nodemon node ./bin/www",
-    "dev": "node bin/dev_server"
+    "dev": "node bin/dev_server",
+    "dev:server": "cross-env DEBUG=fake-messages:* nodemon node ./bin/www",
+    "dev:client": "webpack -w"
   },
   "nodemonConfig": {
     "watch": [
