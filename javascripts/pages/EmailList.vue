@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <Form :label-width="80" inline>
       <FormItem label="收件人">
         <AutoComplete v-model="filters.toAddress"
@@ -222,3 +222,8 @@ export default {
 }
 </script>
 
+<style scoped>
+.container {
+  min-height: 600px; /* 添加最小高度只为日期选择器能够完整地展示出来 */
+}
+</style>
