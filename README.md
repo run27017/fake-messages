@@ -1,3 +1,7 @@
+> 本项目已迁移到新的地址：
+>
+>     https://github.com/yetrun/fake-messages
+
 # Fake Messages
 
 > 一个虚拟的邮件和短信服务提供商
